@@ -14,7 +14,6 @@ function local_courseflowtool_extend_settings_navigation($settingsnav, $context)
                 'courseflowtool',
                 new pix_icon('i/settings', '')
             );
-            echo "Trying to add a node";
             $settingsnav->add_node($node);
         }
     }
@@ -44,13 +43,6 @@ function local_courseflowtool_add_label($courseid, $section, $labeltext) {
     require_once($CFG->dirroot . '/mod/label/lib.php');
     require_once($CFG->dirroot . '/course/modlib.php'); // Required for course modules
     require_once($CFG->dirroot . '/course/lib.php');
-
-    // $section = $DB->get_record('course_sections', ['course' => $courseid, 'section' => $sectionnum]);
-
-    // if (!$section) {
-    //     echo "Section $sectionnum does not exist in course $courseid";
-    //     return null; // Stop if section doesn't exist
-    // }
 
     // Define the label data
     $label = new stdClass();
@@ -83,7 +75,7 @@ function local_courseflowtool_add_label($courseid, $section, $labeltext) {
     return $labelid;
 }
 
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents) {
+function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/externallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
@@ -92,12 +84,13 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
-    // $section = $DB->get_record('course_sections', ['course' => $courseid, 'section' => $sectionnum]);
+    // Step 1: Get the default grade item category for use later
 
-    // if (!$section) {
-    //     echo "Section $sectionnum does not exist in course $courseid";
-    //     return null; // Stop if section doesn't exist
-    // }
+    // Retrieve the default grade category
+    $default_category = $DB->get_record('grade_categories', [
+        'courseid' => $courseid,
+        'parent' => null // 0 means "root" category
+    ]);
 
     // Step 2: Get the "lesson" module ID from 'modules' table
     $module = $DB->get_record('modules', ['name' => 'lesson']);
@@ -159,22 +152,50 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
     $DB->insert_record('lesson_answers', $answer);
 
+    // Step 9: Add the outcomes
+
+    $itemnumber=1000;
+
+    if (!empty($outcomes)) {
+        foreach ($outcomes as $outcomeid) {
+            $outcome = $DB->get_record('grade_outcomes', ['id' => $outcomeid], '*', MUST_EXIST);
+            $grade_item = new stdClass();
+            $grade_item->courseid = $courseid;
+            $grade_item->iteminstance = $lessonid;
+            $grade_item->itemmodule = 'lesson';
+            $grade_item->itemnumber = $itemnumber;
+            $grade_item->itemtype = 'mod';
+            $grade_item->itemname = $lessonname . " - Outcome " . $outcomeid;
+            $grade_item->categoryid = $default_category->id;
+            $grade_item->outcomeid = $outcomeid; // Default for outcomes
+            $grade_item->scaleid = $outcome->scaleid;
+            $grade_item->grade_displaytype = GRADE_DISPLAY_TYPE_REAL; // Show the grade as a real number
+            $grade_item->timecreated = time();
+            $grade_item->timemodified = time();
+            
+            // Insert the new grade item
+            $DB->insert_record('grade_items', $grade_item);
+            $itemnumber = $itemnumber+1;
+        }
+    }
+
+
     return $lessonid;
 }
 
 
-function local_courseflowtool_add_outcome($courseid, $outcometext, $outcomecode) {
+function local_courseflowtool_add_outcome($courseid, $fullname, $shortname) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/gradelib.php');
 
     $outcome = new stdClass();
-    $outcome->shortname = $outcomecode;
-    $outcome->fullname = $outcometext;
+    $outcome->shortname = $shortname;
+    $outcome->fullname = $fullname;
     $outcome->scaleid = 1; // ID of the scale to be used, change this to something you are sure exists
     $outcome->courseid = $courseid; // ID of the course
 
     $gradeOutcome = new grade_outcome($outcome);
     $gradeOutcome->insert();
 
-    return $outcome;
+    return $DB->get_record('grade_outcomes', ['shortname' => $shortname, 'courseid' => $courseid], '*', MUST_EXIST);
 }

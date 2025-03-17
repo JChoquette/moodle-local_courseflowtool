@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLDB PATH="courseflowtool/db" VERSION="2024010101" COMMENT="CourseFlow ID mapping table">
+    <TABLE NAME="courseflowtool_map" COMMENT="Mapping between CourseFlow objects and Moodle objects">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="courseflow_id" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="moodle_lessonid" TYPE="int" LENGTH="10" NULL="true"/>
+            <FIELD NAME="moodle_outcomeid" TYPE="int" LENGTH="10" NULL="true"/>
+            <FIELD NAME="type" TYPE="char" LENGTH="10" NOTNULL="true"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="courseflow_idx" UNIQUE="false" FIELDS="courseflow_id, courseid"/>
+        </INDEXES>
+    </TABLE>
+</XMLDB>
