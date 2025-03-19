@@ -1,11 +1,20 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
+function local_courseflowtool_require_course_access() {
+    $courseid = required_param('courseid', PARAM_INT);
+    require_login($courseid);
+    $context = context_course::instance($courseid);
+    require_capability('local/courseflowtool:view', $context);
+    require_capability('moodle/course:manageactivities', $context);
+    return $courseid;
+}
+
 function local_courseflowtool_extend_settings_navigation($settingsnav, $context) {
     if ($context->contextlevel == CONTEXT_COURSE) {
         // Check if the user has the required capability.
         if (has_capability('local/courseflowtool:view', $context)) {
-            $url = new moodle_url('/local/courseflowtool/course.php', ['id' => $context->instanceid]);
+            $url = new moodle_url('/local/courseflowtool/import_tool.php', ['courseid' => $context->instanceid]);
             $node = navigation_node::create(
                 'CourseFlow Tool',
                 $url,
@@ -75,7 +84,7 @@ function local_courseflowtool_add_label($courseid, $section, $labeltext) {
     return $labelid;
 }
 
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes) {
+function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflow_id) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/externallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
@@ -179,12 +188,21 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         }
     }
 
+    //Step 10: Create a mapping between the courseflow id and the Moodle one
+
+    $DB->insert_record('courseflowtool_map', [
+        'courseid' => $courseid,
+        'courseflow_id' => $courseflow_id,
+        'moodle_lessonid' => $lessonid,
+        'type' => 'lesson'
+    ]);
+
 
     return $lessonid;
 }
 
 
-function local_courseflowtool_add_outcome($courseid, $fullname, $shortname) {
+function local_courseflowtool_add_outcome($courseid, $fullname, $shortname, $courseflow_id) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/gradelib.php');
 
@@ -197,5 +215,17 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortname) {
     $gradeOutcome = new grade_outcome($outcome);
     $gradeOutcome->insert();
 
-    return $DB->get_record('grade_outcomes', ['shortname' => $shortname, 'courseid' => $courseid], '*', MUST_EXIST);
+    $this_outcome = $DB->get_record('grade_outcomes', ['shortname' => $shortname, 'courseid' => $courseid], '*', MUST_EXIST);
+
+    //Create a mapping between the courseflow id and the Moodle one
+
+
+    $DB->insert_record('courseflowtool_map', [
+        'courseid' => $courseid,
+        'courseflow_id' => $courseflow_id,
+        'moodle_outcomeid' => $this_outcome->id,
+        'type' => 'outcome'
+    ]);
+
+    return $this_outcome;
 }

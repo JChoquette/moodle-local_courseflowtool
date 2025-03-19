@@ -21,7 +21,7 @@ function local_courseflowtool_run_import($courseid,$json_data){
             $counter++;
         }
 
-        $created_outcome = local_courseflowtool_add_outcome($courseid, $outcome['fullname'], $unique_shortname);
+        $created_outcome = local_courseflowtool_add_outcome($courseid, $fullname, $unique_shortname,$outcome['id']);
         $outcome_mapping[$outcome['id']] = $created_outcome->id;
     }
 
@@ -40,7 +40,8 @@ function local_courseflowtool_run_import($courseid,$json_data){
                 $lesson_data['lessonintro'],
                 $lesson_data['pagetitle'],
                 $lesson_data['pagecontents'],
-                $mapped_outcomes
+                $mapped_outcomes,
+                $lesson_data["id"],
             );
         }
     }

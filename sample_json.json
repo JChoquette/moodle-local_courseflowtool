@@ -4,6 +4,7 @@
 			"title":"A sample section",
 			"lessons":[
 				{
+					"id":1,
 					"lessonname":"A sample lesson",
 					"lessonintro":"Description of the lesson",
 					"pagetitle":"The title of the content page",
@@ -11,6 +12,7 @@
 					"outcomes":[1,2]
 				},
 				{
+					"id":2,
 					"lessonname":"A sample lesson 2",
 					"lessonintro":"Description of the lesson 2",
 					"pagetitle":"The title of the content page 2",
