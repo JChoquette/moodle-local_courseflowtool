@@ -19,6 +19,8 @@ function process_import($json_data,$courseid,$selected_lessons,$selected_outcome
     $lessons_made = 0;
 
     // Track outcome ID mappings from JSON to Moodle
+    //TODO: We actually don't need to do this anymore thanks to the new table! We can just search directly for the CourseFlow outcome
+
     $outcome_mapping = [];
 
 

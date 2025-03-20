@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XMLDB PATH="local/courseflowtool/db" VERSION="2024010101" COMMENT="CourseFlow ID mapping table">
     <TABLES>
-        <TABLE NAME="courseflowtool_map" COMMENT="Mapping between CourseFlow objects and Moodle objects">
+        <TABLE NAME="local_courseflowtool_map" COMMENT="Mapping between CourseFlow objects and Moodle objects">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
@@ -16,6 +16,32 @@
             <INDEXES>
                 <INDEX NAME="courseflow_idx" UNIQUE="false" FIELDS="courseflow_id, courseid"/>
             </INDEXES>
+        </TABLE>
+        <TABLE NAME="local_courseflowtool_settings" COMMENT="CourseFlow settings for any given course, including url and preferences">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+                
+                <!-- URL to fetch JSON data -->
+                <FIELD NAME="importurl" TYPE="text" NOTNULL="false" COMMENT="URL to import JSON data from" />
+                
+                <!-- Boolean to determine if courseflow styling should be applied -->
+                <FIELD NAME="courseflow_style" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" COMMENT="Apply CourseFlow styling (1 for yes, 0 for no)" />
+                
+                <!-- Future-proofing: Additional fields -->
+                <FIELD NAME="custom_value_1" TYPE="text" NOTNULL="false" COMMENT="Additional future setting 1" />
+                <FIELD NAME="custom_value_2" TYPE="text" NOTNULL="false" COMMENT="Additional future setting 2" />
+
+            </FIELDS>
+
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+
+            <INDEXES>
+                <INDEX NAME="courseid_index" UNIQUE="true" FIELDS="courseid"/>
+            </INDEXES>
+
         </TABLE>
     </TABLES>
 </XMLDB>

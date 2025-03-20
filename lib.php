@@ -1,6 +1,7 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
+//Should be run at the top of any AJAX calls or php-generated pages. Ensures the user has permissions to use the tool and is logged in.
 function local_courseflowtool_require_course_access() {
     $courseid = required_param('courseid', PARAM_INT);
     require_login($courseid);
@@ -46,43 +47,44 @@ function local_courseflowtool_create_topic($courseid, $sectionname) {
     return $section;
 }
 
-function local_courseflowtool_add_label($courseid, $section, $labeltext) {
-    global $DB, $CFG;
-    require_once($CFG->libdir . '/externallib.php');
-    require_once($CFG->dirroot . '/mod/label/lib.php');
-    require_once($CFG->dirroot . '/course/modlib.php'); // Required for course modules
-    require_once($CFG->dirroot . '/course/lib.php');
+//No longer needed, kept for posterity
+// function local_courseflowtool_add_label($courseid, $section, $labeltext) {
+//     global $DB, $CFG;
+//     require_once($CFG->libdir . '/externallib.php');
+//     require_once($CFG->dirroot . '/mod/label/lib.php');
+//     require_once($CFG->dirroot . '/course/modlib.php'); // Required for course modules
+//     require_once($CFG->dirroot . '/course/lib.php');
 
-    // Define the label data
-    $label = new stdClass();
-    $label->course = $courseid;
-    $label->section = $section; // The section where the label should be added
-    $label->name = 'New Label';
-    $label->intro = $labeltext; // The content of the label
-    $label->introformat = FORMAT_HTML;
-    $label->timemodified = time();
+//     // Define the label data
+//     $label = new stdClass();
+//     $label->course = $courseid;
+//     $label->section = $section; // The section where the label should be added
+//     $label->name = 'New Label';
+//     $label->intro = $labeltext; // The content of the label
+//     $label->introformat = FORMAT_HTML;
+//     $label->timemodified = time();
 
-    // Insert the label instance into the database
-    $labelid = label_add_instance($label);
+//     // Insert the label instance into the database
+//     $labelid = label_add_instance($label);
 
-    // Now create a course module entry for the label
-    $module = $DB->get_record('modules', ['name' => 'label']);
-    $cm = new stdClass();
-    $cm->course = $courseid;
-    $cm->module = $module->id;
-    $cm->instance = $labelid;
-    $cm->section = $section->section;
-    $cm->visible = 1; // Make it visible
-    $cm->added = time();
+//     // Now create a course module entry for the label
+//     $module = $DB->get_record('modules', ['name' => 'label']);
+//     $cm = new stdClass();
+//     $cm->course = $courseid;
+//     $cm->module = $module->id;
+//     $cm->instance = $labelid;
+//     $cm->section = $section->section;
+//     $cm->visible = 1; // Make it visible
+//     $cm->added = time();
 
-    // Insert the course module and update section
-    $cmid = $DB->insert_record('course_modules', $cm);
+//     // Insert the course module and update section
+//     $cmid = $DB->insert_record('course_modules', $cm);
 
 
-    course_add_cm_to_section($courseid, $cmid, $section->section);
+//     course_add_cm_to_section($courseid, $cmid, $section->section);
 
-    return $labelid;
-}
+//     return $labelid;
+// }
 
 function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflow_id) {
     global $DB, $CFG;
@@ -167,6 +169,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
     if (!empty($outcomes)) {
         foreach ($outcomes as $outcomeid) {
+            //TODO: Add handling for when the outcome doesn't exist. The user may have chosen not to import that outcome!
             $outcome = $DB->get_record('grade_outcomes', ['id' => $outcomeid], '*', MUST_EXIST);
             $grade_item = new stdClass();
             $grade_item->courseid = $courseid;
