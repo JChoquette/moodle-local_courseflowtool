@@ -1,26 +1,18 @@
 <?php
 
 // Define event handlers for CourseFlow tool.
+//We have one observer to delete everything when the course is deleted.
+//We have another to delete mappings when a lesson (or rather its module) is deleted.
+//Deleting an outcome does not trigger an event, sadly. This is instead handled in lib.php's local_courseflowtool_cleanup() function.
 $observers = [
     [
         'eventname'   => '\core\event\course_deleted',
         'callback'    => 'local_courseflowtool_observer::handle_course_deleted',
         'includefile' => '/local/courseflowtool/classes/observer.php',
-        'priority'    => 1000,
-        'internal'    => false,
     ],
     [
-        'eventname'   => '\mod_lesson\event\lesson_deleted',
+        'eventname'   => '\core\event\course_module_deleted',
         'callback'    => 'local_courseflowtool_observer::handle_lesson_deleted',
         'includefile' => '/local/courseflowtool/classes/observer.php',
-        'priority'    => 1000,
-        'internal'    => false,
-    ],
-    [
-        'eventname'   => '\core\event\grade_item_deleted',
-        'callback'    => 'local_courseflowtool_observer::handle_outcome_deleted',
-        'includefile' => '/local/courseflowtool/classes/observer.php',
-        'priority'    => 1000,
-        'internal'    => false,
     ],
 ];

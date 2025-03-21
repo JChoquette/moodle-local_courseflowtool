@@ -1,8 +1,11 @@
 <?php
 require_once('../../config.php');
 require_once('lib.php');
+global $DB;
+
 
 $courseid = local_courseflowtool_require_course_access();
+require_sesskey();
 
 header('Content-Type: application/json');
 
@@ -29,7 +32,24 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 
 // Store the JSON in the session for preview
-$_SESSION['courseflow_import_data'] = $json;
+//Is this the right way to do this? Seems like Moodle uses $SESSION as a wrapper for $_SESSION.
+$SESSION->courseflow_import_data = $json;
+
+// Check if course settings exist for this course.
+$settings = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
+
+if (!$settings) {
+    // Create default settings if none exist.
+    $settings = new stdClass();
+    $settings->courseid = $courseid;
+    $settings->import_url = ''; // Default value, change if needed.
+    $settings->courseflow_style = 0; // Default to no styling.
+    $settings->timecreated = time();
+    $settings->timemodified = time();
+
+    // Insert the new settings into the database.
+    $DB->insert_record('local_courseflowtool_settings', $settings);
+}
 
 // Respond with redirect instruction
 echo json_encode(['redirect' => 'preview_import.php?courseid=' .$courseid]);

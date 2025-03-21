@@ -11,13 +11,13 @@ $PAGE->set_heading('Preview CourseFlow Import');
 
 echo $OUTPUT->header();
 
-if (empty($_SESSION['courseflow_import_data'])) {
+if (!$SESSION->courseflow_import_data) {
     echo "<p>No data to preview. Please go back and upload JSON first.</p>";
     echo $OUTPUT->footer();
     exit;
 }
 
-$json_data = $_SESSION['courseflow_import_data'];
+$json_data = $SESSION->courseflow_import_data;
 
 
 //Create the form with the preview to allow the user to determine what should/shouldn't be imported
@@ -52,11 +52,7 @@ echo '</form>';
 document.getElementById('confirm-import').addEventListener('click', function() {
     let formData = new FormData(document.getElementById('import-form'));
 
-
-    // Add courseid to FormData
-    //formData.append('courseid', <?php echo $courseid; ?>);
-
-    fetch('finalize_import.php?courseid=<?php echo $courseid; ?>', {
+    fetch('finalize_import.php?courseid=<?php echo $courseid; ?>&sesskey=<?php echo sesskey(); ?>', {
         method: 'POST',
         body: formData
     })

@@ -2,8 +2,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//TODO: Test these to make sure they are working
-
 class local_courseflowtool_observer {
 
     /**
@@ -24,30 +22,29 @@ class local_courseflowtool_observer {
     }
 
     /**
-     * Handle lesson deletion: clean up mappings in courseflowtool_map.
+     * Handle lesson deletion: clean up mappings in local_courseflowtool_map.
      *
      * @param \mod_lesson\event\lesson_deleted $event
      */
-    public static function handle_lesson_deleted(\mod_lesson\event\lesson_deleted $event) {
+    public static function handle_lesson_deleted(\core\event\course_module_deleted $event) {
         global $DB;
 
-        $lessonid = $event->objectid;
+        //Get the "lesson" module ID from 'modules' table
+        $lesson_module = $DB->get_record('modules', ['name' => 'lesson']);
+        if (!$lesson_module) {
+            return null;
+        }
 
-        // Delete mapping for the deleted lesson.
-        $DB->delete_records('local_courseflowtool_map', ['moodleid' => $lessonid, 'type' => 'lesson']);
+        //Get the course module deletion snapshot
+        $cm_snapshot = $event->get_record_snapshot('course_modules', $event->objectid);
+
+        if($cm_snapshot && $cm_snapshot->module == $lesson_module->id){
+            $lessonid = $cm_snapshot->instance;
+            // Delete mapping for the deleted lesson.
+            $DB->delete_records('local_courseflowtool_map', ['moodle_lessonid' => $lessonid, 'type' => 'lesson', 'courseid' => $event->courseid]);
+        }
+
+
     }
 
-    /**
-     * Handle outcome deletion: clean up mappings in courseflowtool_map.
-     *
-     * @param \core\event\grade_item_deleted $event
-     */
-    public static function handle_outcome_deleted(\core\event\grade_item_deleted $event) {
-        global $DB;
-
-        $outcomeid = $event->objectid;
-
-        // Delete mapping for the deleted outcome.
-        $DB->delete_records('local_courseflowtool_map', ['moodleid' => $outcomeid, 'type' => 'outcome']);
-    }
 }

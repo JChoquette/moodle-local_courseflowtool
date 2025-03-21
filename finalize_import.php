@@ -3,74 +3,64 @@ require_once(__DIR__ . '/../../config.php');
 require_once('lib.php');
 
 $courseid = local_courseflowtool_require_course_access();
+require_sesskey();
 
 header('Content-Type: application/json');
 
 ob_start();
 
-function process_import($json_data,$courseid,$selected_lessons,$selected_outcomes,$selected_sections){
+function local_courseflowtool_process_import($json_data,$courseid,$selected_lessons,$selected_outcomes,$selected_sections){
     require_once(__DIR__ . '/lib.php');
     global $DB, $CFG;
-
-    file_put_contents(__DIR__ . '/debug.log', print_r($json_data, true), FILE_APPEND);
 
     $outcomes_made = 0;
     $sections_made = 0;
     $lessons_made = 0;
 
-    // Track outcome ID mappings from JSON to Moodle
-    //TODO: We actually don't need to do this anymore thanks to the new table! We can just search directly for the CourseFlow outcome
-
-    $outcome_mapping = [];
-
+    local_courseflowtool_cleanup($courseid);
 
     foreach ($json_data['outcomes'] as $index => $outcome) {
         if (in_array($outcome["id"], $selected_outcomes)) {
-            $shortname = $outcome['shortname'];
-            $fullname = $outcome['fullname'];
-
-            // Ensure shortname is unique
-            $counter = 1;
-            $unique_shortname = $shortname;
-            while ($DB->record_exists('grade_outcomes', ['shortname' => $unique_shortname, 'courseid' => $courseid])) {
-                $unique_shortname = $shortname . '-' . $counter;
-                $counter++;
-            }
-
+            
+            $created_outcome = local_courseflowtool_add_outcome(
+                $courseid, 
+                $outcome['fullname'],
+                $outcome['shortname'],
+                $outcome['id']
+            );
             $outcomes_made++;
-
-            //Uncomment when ready for actual creation
-            //$created_outcome = local_courseflowtool_add_outcome($courseid, $fullname, $unique_shortname,$outcome['id']);
-            //$outcome_mapping[$outcome['id']] = $created_outcome->id;
         }
     }
 
     // Create Sections and Lessons
-    foreach ($json_data['sections'] as $section_data) {
+    foreach ($json_data['sections'] as $section_index => $section_data) {
 
-        //TODO: Instead of creating, first check if that index already exists and rename it
-        //TODO: Only rename it if the section appears in $selected_sections
-        //$section = local_courseflowtool_create_topic($courseid, $section_data['title']);
+        //Create the section. Unlike lessons or outcomes, this needs to know if the section has been selected directly, since we need to create a new section anyways even if the user has deselected it in the case where we don't have enough sections
+        //We update section_index+1 because the top (0th) section in Moodle is usually for announcements/course info, it isn't one of the "topics"
+        $update_section = in_array($section_index,$selected_sections);
+        $section = local_courseflowtool_create_topic(
+            $courseid, 
+            $section_data['title'],
+            $section_index+1,
+            $update_section
+            
+        );
 
         $sections_made++;
 
         foreach ($section_data['lessons'] as $lesson_index => $lesson_data) {
             if (in_array($lesson_data["id"], $selected_lessons)) {
-                // Map outcome IDs from JSON to actual Moodle outcome IDs
-                $mapped_outcomes = array_map(fn($id) => $outcome_mapping[$id] ?? null, $lesson_data['outcomes']);
-                $mapped_outcomes = array_filter($mapped_outcomes); // Remove any nulls
-
-                //Enable when ready to create
-                // local_courseflowtool_add_lesson(
-                //     $courseid,
-                //     $section,
-                //     $lesson_data['lessonname'],
-                //     $lesson_data['lessonintro'],
-                //     $lesson_data['pagetitle'],
-                //     $lesson_data['pagecontents'],
-                //     $mapped_outcomes,
-                //     $lesson_data["id"],
-                // );
+                
+                local_courseflowtool_add_lesson(
+                    $courseid,
+                    $section,
+                    $lesson_data['lessonname'],
+                    $lesson_data['lessonintro'],
+                    $lesson_data['pagetitle'],
+                    $lesson_data['pagecontents'],
+                    $lesson_data['outcomes'],
+                    $lesson_data["id"],
+                );
 
                 $lessons_made++;
             }
@@ -80,29 +70,30 @@ function process_import($json_data,$courseid,$selected_lessons,$selected_outcome
     //TODO: uncomment this? Or move it elsewhere?
     //unset($_SESSION['courseflow_import_data']); // Clear session data
     
+    \cache_helper::purge_by_event('changesincourse', $courseid);
+
     return ['status' => 'success', 'message' => 'Import completed successfully! Created '.$outcomes_made.' outcomes, '.$sections_made.' sections,  '.$lessons_made.' lessons.'];
 
    // return ['status' => 'success', 'message' => 'Import completed successfully!'];
 
 }
 
-
-if (empty($_SESSION['courseflow_import_data'])) {
+//Is this use of $SESSION correct?
+if (!$SESSION->courseflow_import_data) {
     ob_end_clean();
     echo json_encode(['message' => 'No data found in session.']);
     exit;
 }
 
-$json_data = $_SESSION['courseflow_import_data'];
-error_log(print_r($json_data));
+$json_data = $SESSION->courseflow_import_data ?? null;
 
-$selected_lessons = $_POST['lessons'] ?? [];
-$selected_outcomes = $_POST['outcomes'] ?? [];
-$selected_sections = $_POST['sections'] ?? [];
-
+//TODO: Don't access post directly like this!
+$selected_lessons = optional_param('lessons', [], PARAM_INT);
+$selected_outcomes = optional_param('outcomes', [], PARAM_INT);
+$selected_sections = optional_param('sections', [], PARAM_INT);
 
 // Run the import and get the result
-$result = process_import($json_data, $courseid,$selected_lessons,$selected_outcomes,$selected_sections);
+$result = local_courseflowtool_process_import($json_data, $courseid,$selected_lessons,$selected_outcomes,$selected_sections);
 
 
 // Return JSON response
