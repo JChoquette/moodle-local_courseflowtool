@@ -68,6 +68,8 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
+
+
     //Check for an existing outcome previously created from this courseflow id
     $existing_map = $DB->get_record('local_courseflowtool_map',[
         'courseflow_id' => $courseflow_id, 
@@ -113,7 +115,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
         // Step 3: Create the lesson's intro data
         $introeditor = [];
-        $introeditor['text'] = $lessonname;
+        $introeditor['text'] = $lessonintro;
         $introeditor['format'] = FORMAT_HTML;
 
         // Step 4: Create the lesson module data
@@ -128,11 +130,10 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $lesson->timemodified = time();
         $lesson->introeditor = $introeditor;
 
-        //Step 5: Create the actual module
+        //Step 5: Create the actual module, then fetch the newly created course module
         $new_lesson = create_module($lesson);
         $lessonid = $new_lesson->id;
 
-        // Step 5: Fetch the newly created course module
         $cm = $DB->get_record('course_modules',[
             'course'=>$courseid,
             'instance'=>$lessonid,
@@ -145,30 +146,25 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
         // Step 7: Add a content page to the lesson
 
+        // Get the context of the course module
+        $context = context_module::instance($cm->id);
+
+        $contents_editor = [];
+        $contents_editor['text'] = $pagecontents;
+        $contents_editor['format'] = FORMAT_HTML;
+
         $page = new stdClass();
         $page->lessonid = $lessonid;
         $page->title = $pagetitle;
-        $page->contents = $pagecontents;
-        $page->contentsformat = FORMAT_HTML;
+        $page->contents_editor = $contents_editor;
         $page->qtype = LESSON_PAGE_BRANCHTABLE; // This specifies it's a content page
-        $page->prevpageid = 0; // First page in the lesson
-        $page->nextpageid = 0; // No next page yet
-        $page->timecreated = time();
-        $page->timemodified = time();
 
-        $pageid = $DB->insert_record('lesson_pages', $page);
+        //This automatically creates the "answers"
+        $page = lesson_page::create($page,new lesson($new_lesson),$context,$CFG->maxbytes);
+
         
-        // Step 8: Add a default jump (this is required for the lesson to function properly)
-        $answer = new stdClass();
-        $answer->lessonid = $lessonid;
-        $answer->pageid = $pageid;
-        $answer->jumpto = LESSON_NEXTPAGE; // Default to next page
-        $answer->timecreated = time();
-        $answer->timemodified = time();
 
-        $DB->insert_record('lesson_answers', $answer);
-
-        //Step 11: Create a mapping between the courseflow id and the Moodle one
+        //Step 8: Create a mapping between the courseflow id and the Moodle one
 
         $DB->insert_record('local_courseflowtool_map', [
             'courseid' => $courseid,
@@ -263,9 +259,10 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $grade_item->grade_displaytype = GRADE_DISPLAY_TYPE_REAL; // Show the grade as a real number
         $grade_item->timecreated = time();
         $grade_item->timemodified = time();
+
+        $new_grade_item = new grade_item($grade_item);
+        $grade_item_id = $new_grade_item->insert();
         
-        // Insert the new grade item
-        $DB->insert_record('grade_items', $grade_item);
     }
 
     //Step 10: Remove any outcomes that don't show up in the list
@@ -278,10 +275,12 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     // Loop through all existing grade items and delete any that are not in the list of outcomes to keep
     foreach ($existing_grade_items as $grade_item) {
         if ($grade_item->outcomeid && !in_array($grade_item->outcomeid, $outcome_ids_to_keep)) {
-            $DB->delete_records('grade_items', [
-                'id' => $grade_item->id,
-                'courseid' => $courseid
-            ]);
+            $this_grade_item = new grade_item($grade_item);
+            $this_grade_item->delete();
+            // $DB->delete_records('grade_items', [
+            //     'id' => $grade_item->id,
+            //     'courseid' => $courseid
+            // ]);
         }
     }
 
@@ -389,6 +388,38 @@ function local_courseflowtool_cleanup($courseid){
             ]);
         }
     }
+
+    // Get the "lesson" module ID from 'modules' table
+    $module = $DB->get_record('modules', ['name' => 'lesson']);
+    if (!$module) {
+        debugging("Lesson module not found in 'modules' table.", DEBUG_DEVELOPER);
+        return null;
+    }
+
+    // Get all mapped lesson IDs
+    $mapped_lessons = $DB->get_records('local_courseflowtool_map', [
+        'type' => 'lesson',
+        'courseid' => $courseid
+    ]);
+
+    foreach ($mapped_lessons as $map) {
+        $lesson_module_exists = $DB->record_exists('course_modules', [
+            'instance' => $map->moodle_lessonid,
+            'course' => $courseid,
+            'module' => $module->id,
+            'deletioninprogress' => 0
+        ]);
+
+        // If the outcome no longer exists, delete the mapping
+        if (!$lesson_module_exists) {
+            $DB->delete_records('local_courseflowtool_map', [
+                'moodle_lessonid' => $map->moodle_lessonid,
+                'type' => 'lesson',
+                'courseid' => $courseid
+            ]);
+        }
+    }
+
 
 }
 

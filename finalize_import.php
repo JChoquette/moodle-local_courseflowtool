@@ -68,13 +68,11 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
     }
 
     //TODO: uncomment this? Or move it elsewhere?
-    //unset($_SESSION['courseflow_import_data']); // Clear session data
+    //unset($SESSION->courseflow_import_data); // Clear session data
     
     \cache_helper::purge_by_event('changesincourse', $courseid);
 
     return ['status' => 'success', 'message' => 'Import completed successfully! Created '.$outcomes_made.' outcomes, '.$sections_made.' sections,  '.$lessons_made.' lessons.'];
-
-   // return ['status' => 'success', 'message' => 'Import completed successfully!'];
 
 }
 
@@ -87,7 +85,7 @@ if (!$SESSION->courseflow_import_data) {
 
 $json_data = $SESSION->courseflow_import_data ?? null;
 
-//TODO: Don't access post directly like this!
+
 $selected_lessons = optional_param('lessons', [], PARAM_INT);
 $selected_outcomes = optional_param('outcomes', [], PARAM_INT);
 $selected_sections = optional_param('sections', [], PARAM_INT);
