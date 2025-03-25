@@ -1,4 +1,12 @@
 <?php
+/**
+ * CourseFlow Import Tool for Moodle
+ *
+ * @package    local_courseflowtool
+ * @copyright  2025 Jeremie Choquette
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once(__DIR__ . '/../../config.php');
 require_once('lib.php');
 
@@ -72,14 +80,14 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
     
     \cache_helper::purge_by_event('changesincourse', $courseid);
 
-    return ['status' => 'success', 'message' => 'Import completed successfully! Created '.$outcomes_made.' outcomes, '.$sections_made.' sections,  '.$lessons_made.' lessons.'];
+    return ['status' => 'success', 'message' => get_string('import_success','local_courseflowtool').' '.$outcomes_made.' '.get_string('outcomes','local_courseflowtool').', '.$sections_made.' '.get_string('sections','local_courseflowtool').', '.$lessons_made.' '.get_string('lessons','local_courseflowtool').'.'];
 
 }
 
 //Is this use of $SESSION correct?
 if (!$SESSION->courseflow_import_data) {
     ob_end_clean();
-    echo json_encode(['message' => 'No data found in session.']);
+    echo json_encode(['message' => get_string('no_data','local_courseflowtool')]);
     exit;
 }
 

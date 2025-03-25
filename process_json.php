@@ -1,4 +1,12 @@
 <?php
+/**
+ * CourseFlow Import Tool for Moodle
+ *
+ * @package    local_courseflowtool
+ * @copyright  2025 Jeremie Choquette
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 require_once('lib.php');
 global $DB;
@@ -19,7 +27,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 
 if (!$data || empty($data['json'])) {
-    echo json_encode(['message' => 'Invalid JSON data.']);
+    echo json_encode(['message' => get_string('json_process_invalid','local_courseflowtool')]);
     exit;
 }
 
@@ -27,7 +35,7 @@ if (!$data || empty($data['json'])) {
 $json = json_decode($data['json'], true);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(['message' => 'Error decoding JSON.']);
+    echo json_encode(['message' => get_string('json_process_decode_error','local_courseflowtool')]);
     exit;
 }
 

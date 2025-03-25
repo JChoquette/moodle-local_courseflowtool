@@ -1,4 +1,11 @@
 <?php
+/**
+ * CourseFlow Import Tool for Moodle
+ *
+ * @package    local_courseflowtool
+ * @copyright  2025 Jeremie Choquette
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 // Define event handlers for CourseFlow tool.
 //We have one observer to delete everything when the course is deleted.

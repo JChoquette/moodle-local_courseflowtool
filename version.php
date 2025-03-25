@@ -1,4 +1,12 @@
 <?php
+/**
+ * CourseFlow Import Tool for Moodle
+ *
+ * @package    local_courseflowtool
+ * @copyright  2025 Jeremie Choquette
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+ 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_courseflowtool';
