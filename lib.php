@@ -110,34 +110,38 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     //If the lesson doesn't already exist
     if(!$this_lesson){
 
-        // Step 3: Create a course module entry (but without an instance ID yet)
-        $cm = new stdClass();
-        $cm->course = $courseid;
-        $cm->module = $module->id;
-        $cm->section = $section->section;
-        $cm->visible = 1; // Make it visible
-        $cm->showdescription = 1; //Show the description on the course page
-        $cm->added = time();
 
-        $cmid = $DB->insert_record('course_modules', $cm);
+        // Step 3: Create the lesson's intro data
+        $introeditor = [];
+        $introeditor['text'] = $lessonname;
+        $introeditor['format'] = FORMAT_HTML;
 
-        // Step 4: Create the lesson instance
+        // Step 4: Create the lesson module data
         $lesson = new stdClass();
         $lesson->course = $courseid;
+        $lesson->modulename = 'lesson';
+        $lesson->section = $section->section;
+        $lesson->show_description = 1;
+        $lesson->visible = 1;
         $lesson->name = $lessonname;
-        $lesson->intro = $lessonintro;
-        $lesson->introformat = FORMAT_HTML;
         $lesson->available = time(); 
         $lesson->timemodified = time();
-        $lesson->coursemodule = $cmid; // Set the course module ID before inserting
+        $lesson->introeditor = $introeditor;
 
-        $lessonid = lesson_add_instance($lesson, []);
+        //Step 5: Create the actual module
+        $new_lesson = create_module($lesson);
+        $lessonid = $new_lesson->id;
 
-        // Step 5: Update the course module with the correct instance ID
-        $DB->set_field('course_modules', 'instance', $lessonid, ['id' => $cmid]);
+        // Step 5: Fetch the newly created course module
+        $cm = $DB->get_record('course_modules',[
+            'course'=>$courseid,
+            'instance'=>$lessonid,
+            'module'=>$module->id
+        ]);
 
-        // Step 6: Add the course module to the correct section
-        course_add_cm_to_section($courseid, $cmid, $section->section);
+        // Step 6: Update the course module to show the description
+        $cm->showdescription=1;
+        $DB->update_record('course_modules',$cm);
 
         // Step 7: Add a content page to the lesson
 
@@ -388,41 +392,3 @@ function local_courseflowtool_cleanup($courseid){
 
 }
 
-//No longer needed, kept for posterity
-// function local_courseflowtool_add_label($courseid, $section, $labeltext) {
-//     global $DB, $CFG;
-//     require_once($CFG->libdir . '/externallib.php');
-//     require_once($CFG->dirroot . '/mod/label/lib.php');
-//     require_once($CFG->dirroot . '/course/modlib.php'); // Required for course modules
-//     require_once($CFG->dirroot . '/course/lib.php');
-
-//     // Define the label data
-//     $label = new stdClass();
-//     $label->course = $courseid;
-//     $label->section = $section; // The section where the label should be added
-//     $label->name = 'New Label';
-//     $label->intro = $labeltext; // The content of the label
-//     $label->introformat = FORMAT_HTML;
-//     $label->timemodified = time();
-
-//     // Insert the label instance into the database
-//     $labelid = label_add_instance($label);
-
-//     // Now create a course module entry for the label
-//     $module = $DB->get_record('modules', ['name' => 'label']);
-//     $cm = new stdClass();
-//     $cm->course = $courseid;
-//     $cm->module = $module->id;
-//     $cm->instance = $labelid;
-//     $cm->section = $section->section;
-//     $cm->visible = 1; // Make it visible
-//     $cm->added = time();
-
-//     // Insert the course module and update section
-//     $cmid = $DB->insert_record('course_modules', $cm);
-
-
-//     course_add_cm_to_section($courseid, $cmid, $section->section);
-
-//     return $labelid;
-// }
