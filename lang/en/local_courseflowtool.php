@@ -52,3 +52,7 @@ $string['no_data_preview'] = 'No data to preview. Please go back and upload JSON
 
 $string['no_data'] = 'No data found in session.';
 $string['import_success'] = 'Import completed successfully! Created';
+
+//privacy/provider.php
+
+$string['privacy:metadata'] = 'No data tied to a specific user is stored. Settings are tied to the Moodle course and its CourseFlow origin course, but not to an individual user. Data input by the user is stored only temporarily during the construction of Moodle objects. It is also not tied to a specific user in any way.';
