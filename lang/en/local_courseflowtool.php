@@ -23,6 +23,7 @@ $string['lessons'] = "Lessons";
 $string['outcomes'] = "Outcomes";
 $string['label_overwrite'] = 'Overwrite existing topic label (if applicable)';
 $string['confirm_import'] = 'Confirm and Import';
+$string['no_data_preview'] = 'No data to preview. Please go back and upload JSON first.';
 
 //finalize_import.php
 

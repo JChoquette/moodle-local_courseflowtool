@@ -18,14 +18,15 @@ $PAGE->set_heading(get_string('preview_title','local_courseflowtool'));
 
 echo $OUTPUT->header();
 
-if (!$SESSION->courseflow_import_data) {
-    echo '<p>'.get_string('No data to preview. Please go back and upload JSON first.','local_courseflowtool').'</p>';
+//Ensure the data exists in the cache
+$cache = cache::make('local_courseflowtool', 'courseflow_import_data');
+$json_data = $cache->get('courseflow_import_data') ?? null;
+
+if (!$json_data) {
+    echo '<p>'.get_string('no_data_preview','local_courseflowtool').'</p>';
     echo $OUTPUT->footer();
     exit;
 }
-
-$json_data = $SESSION->courseflow_import_data;
-
 
 //Create the form with the preview to allow the user to determine what should/shouldn't be imported
 echo '<form id="import-form">';
