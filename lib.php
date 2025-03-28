@@ -24,7 +24,15 @@
  
 defined('MOODLE_INTERNAL') || die();
 
-//Should be run at the top of any AJAX calls or php-generated pages. Ensures the user has permissions to use the tool and is logged in.
+/**
+ * Should be run at the top of any AJAX calls or PHP-generated pages.
+ * 
+ * Ensures the user is logged in and has permission to access the specified course.
+ * If the user lacks the required permissions, appropriate error handling is performed.
+ *
+ * @return int The ID of the course the user is accessing.
+ * @throws moodle_exception If the user does not have the required access or is not logged in.
+ */
 function local_courseflowtool_require_course_access() {
     $courseid = required_param('courseid', PARAM_INT);
     require_login($courseid);
@@ -36,6 +44,15 @@ function local_courseflowtool_require_course_access() {
     return $courseid;
 }
 
+/**
+ * Extends the settings navigation for the course.
+ * 
+ * Adds additional settings options related to the CourseFlow import tool 
+ * to the course navigation block, if the user has the appropriate permissions.
+ *
+ * @param navigation_node $settingsnav The settings navigation node to extend.
+ * @param context $context The context of the course where the navigation is being extended.
+ */
 function local_courseflowtool_extend_settings_navigation($settingsnav, $context) {
     if ($context->contextlevel == CONTEXT_COURSE) {
         // Check if the user has the required capability.
@@ -54,6 +71,20 @@ function local_courseflowtool_extend_settings_navigation($settingsnav, $context)
     }
 }
 
+/**
+ * Creates a new topic (section) in the specified course.
+ *
+ * If a section with the given name already exists at the specified index, 
+ * it updates the section's name and visibility status. Otherwise, it 
+ * creates a new section with the provided details.
+ *
+ * @param int $courseid The ID of the course where the section will be created.
+ * @param string $sectionname The name of the section to create or update.
+ * @param int $index The section number (starting from 1) where the section will be placed. We don't overwrite the first topic, since it is usually reserved for announcements, etc.
+ * @param bool $update_data Whether or not to actually update or alter the data in this.
+ * 
+ * @return stdClass The created or updated section object.
+ */
 function local_courseflowtool_create_topic($courseid, $sectionname, $index, $update_data) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/externallib.php');
@@ -81,6 +112,24 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
 }
 
 
+/**
+ * Adds a new lesson to the specified course section.
+ *
+ * This function creates a lesson with the provided name, introduction, and content page.
+ * It also associates the lesson with the specified outcomes and stores the CourseFlow ID 
+ * for mapping purposes.
+ *
+ * @param int $courseid The ID of the course where the lesson will be added.
+ * @param stdClass $section The section object where the lesson will be placed.
+ * @param string $lessonname The name of the lesson.
+ * @param string $lessonintro The introduction text for the lesson.
+ * @param string $pagetitle The title of the initial content page.
+ * @param string $pagecontents The content of the initial page.
+ * @param array $outcomes An array of outcome IDs to associate with the lesson.
+ * @param int $courseflow_id The CourseFlow ID used for mapping and tracking.
+ *
+ * @return int The ID of the created lesson.
+ */
 function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflow_id) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/externallib.php');
@@ -312,7 +361,19 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     return $lessonid;
 }
 
-
+/**
+ * Adds a new outcome to the specified course.
+ *
+ * This function creates an outcome with the given full name and a temporary short name.
+ * It also stores the CourseFlow ID for mapping purposes.
+ *
+ * @param int $courseid The ID of the course where the outcome will be added.
+ * @param string $fullname The full name of the outcome.
+ * @param string $shortname_temp A temporary short name for the outcome.
+ * @param int $courseflow_id The CourseFlow ID used for mapping and tracking.
+ *
+ * @return stdClass The created outcome object.
+ */
 function local_courseflowtool_add_outcome($courseid, $fullname, $shortname_temp, $courseflow_id) {
     global $DB, $CFG;
     require_once($CFG->libdir . '/gradelib.php');
@@ -381,11 +442,17 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortname_temp,
         $DB->update_record('grade_outcomes',$this_outcome);
     }
 
-    //TODO: Figure out why we still sometimes can't access the "grades" page of the course
-
     return $this_outcome;
 }
 
+/**
+ * Cleans up old mappings and data associated with a course.
+ *
+ * This function removes obsolete data from the local_courseflowtool_map and
+ * local_courseflowtool_settings tables for the specified course.
+ *
+ * @param int $courseid The ID of the course to clean up.
+ */
 function local_courseflowtool_cleanup($courseid){
     global $DB;
 

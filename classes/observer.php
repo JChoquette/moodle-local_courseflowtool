@@ -24,6 +24,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class local_courseflowtool_observer
+ *
+ * Handles event observers for the CourseFlow tool.
+ *
+ * This class defines methods that respond to course deletion
+ * and course module deletion events to remove associated items from
+ * the courseflow tool tables
+ * 
+ * @package    local_courseflowtool
+ * @copyright  2025 Jeremie Choquette
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ */
 class local_courseflowtool_observer {
 
     /**
