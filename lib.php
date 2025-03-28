@@ -42,7 +42,7 @@ function local_courseflowtool_extend_settings_navigation($settingsnav, $context)
         if (has_capability('local/courseflowtool:view', $context)) {
             $url = new moodle_url('/local/courseflowtool/import_tool.php', ['courseid' => $context->instanceid]);
             $node = navigation_node::create(
-                'CourseFlow Tool',
+                get_string('pluginname','local_courseflowtool'),
                 $url,
                 navigation_node::TYPE_SETTING,
                 null,
@@ -72,7 +72,6 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
         // Define the new section data
         $section_data = [
             'name' => $sectionname, // Topic name
-            'summary' => 'This is an automatically generated topic.', // Optional description
             'summaryformat' => 1, // HTML format
         ];
 
