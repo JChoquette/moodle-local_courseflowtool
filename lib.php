@@ -132,10 +132,7 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
  */
 function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflow_id) {
     global $DB, $CFG;
-    require_once($CFG->libdir . '/externallib.php');
-    require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
-    require_once($CFG->dirroot . '/course/modlib.php'); // Required for course modules
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
@@ -348,10 +345,6 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         if ($grade_item->outcomeid && !in_array($grade_item->outcomeid, $outcome_ids_to_keep)) {
             $this_grade_item = new grade_item($grade_item);
             $this_grade_item->delete();
-            // $DB->delete_records('grade_items', [
-            //     'id' => $grade_item->id,
-            //     'courseid' => $courseid
-            // ]);
         }
     }
 

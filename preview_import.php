@@ -80,8 +80,7 @@ document.getElementById('confirm-import').addEventListener('click', function() {
         body: formData
     })
     .then(response => {
-        // response_text = response.text();
-        // console.log(response_text);
+        // console.log(response.text());
         return response.json();
     })
     .then(data => {
