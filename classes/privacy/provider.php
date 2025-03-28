@@ -12,35 +12,16 @@ namespace local_courseflowtool\privacy;
 defined('MOODLE_INTERNAL') || die();
 
 class provider implements
-        // This plugin does store personal user data.
-        \core_privacy\local\metadata\provider {
+    // This plugin does not store any personal user data.
+    \core_privacy\local\metadata\null_provider {
 
-    public static function get_metadata(collection $collection): collection {
-
-        // Information about user settings stored in local_courseflowtool_settings.
-        $collection->add_database_table(
-            'local_courseflowtool_settings',
-            [
-                'courseid' => 'privacy:metadata:courseid',
-                'importurl' => 'privacy:metadata:importurl',
-                'courseflow_style' => 'privacy:metadata:courseflow_style'
-            ],
-            'privacy:metadata:local_courseflowtool_settings'
-        );
-
-        // Lessons and outcomes linked to user entries.
-        $collection->add_database_table(
-            'local_courseflowtool_map',
-            [
-                'courseid' => 'privacy:metadata:courseid',
-                'courseflow_id' => 'privacy:metadata:courseflowid',
-                'moodle_lessonid' => 'privacy:metadata:moodlelessonid',
-                'moodle_outcomeid' => 'privacy:metadata:moodleoutcomeid',
-                'type' => 'privacy:metadata:type'
-            ],
-            'privacy:metadata:local_courseflowtool_map'
-        );
-
-        return $collection;
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
     }
 }
