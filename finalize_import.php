@@ -90,23 +90,26 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
         }
     }
 
-    //TODO: uncomment this? Or move it elsewhere?
-    //unset($SESSION->courseflow_import_data); // Clear session data
-    
+    //Clear course change caches so users see changes like section renaming    
     \cache_helper::purge_by_event('changesincourse', $courseid);
 
     return ['status' => 'success', 'message' => get_string('import_success','local_courseflowtool').' '.$outcomes_made.' '.get_string('outcomes','local_courseflowtool').', '.$sections_made.' '.get_string('sections','local_courseflowtool').', '.$lessons_made.' '.get_string('lessons','local_courseflowtool').'.'];
 
 }
 
-//Is this use of $SESSION correct?
-if (!$SESSION->courseflow_import_data) {
+//Ensure the data exists in the cache
+$cache = cache::make('local_courseflowtool', 'courseflow_import_data');
+$json_data = $cache->get('courseflow_import_data') ?? null;
+
+//Delete the import data from the cache (optional)
+//Currently commented because it's nice to be able to hit refresh on the import and be able to re-import data, but if we want to change this later we can uncomment
+//$cache->delete('import_data');
+
+if (!$json_data) {
     ob_end_clean();
     echo json_encode(['message' => get_string('no_data','local_courseflowtool')]);
     exit;
 }
-
-$json_data = $SESSION->courseflow_import_data ?? null;
 
 
 $selected_lessons = optional_param('lessons', [], PARAM_INT);

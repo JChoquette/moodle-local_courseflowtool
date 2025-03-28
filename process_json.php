@@ -54,9 +54,9 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
-// Store the JSON in the session for preview
-//Is this the right way to do this? Seems like Moodle uses $SESSION as a wrapper for $_SESSION.
-$SESSION->courseflow_import_data = $json;
+// Store the JSON in the cache for preview
+$cache = cache::make('local_courseflowtool', 'courseflow_import_data');
+$cache->set('courseflow_import_data', $json);
 
 // Check if course settings exist for this course.
 $settings = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);

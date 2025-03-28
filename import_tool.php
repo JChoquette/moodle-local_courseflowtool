@@ -25,6 +25,10 @@
 require_once('../../config.php');
 require_once('lib.php');
 
+//Clear the cache before import just to be safe
+$cache = cache::make('local_courseflowtool', 'courseflow_import_data');
+$cache->delete('import_data'); // Ensure clean slate before new import
+
 $courseid = local_courseflowtool_require_course_access();
 
 $PAGE->set_url(new moodle_url('/local/courseflowtool/import_tool.php'));
