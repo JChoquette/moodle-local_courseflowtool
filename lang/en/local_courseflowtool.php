@@ -51,6 +51,8 @@ $string['no_data_preview'] = 'No data to preview. Please go back and upload JSON
 //finalize_import.php
 
 $string['no_data'] = 'No data found in session.';
+$string['error'] = 'Error';
+$string['error_finalize'] = 'Error finalizing import';
 $string['import_success'] = 'Import completed successfully! Created';
 
 //privacy/provider.php

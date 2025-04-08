@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_courseflowtool/preview_import
+
+    This template is used to render the import preview.
+
+    @copyright  2025 Jeremie Choquette
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+    @package    local_courseflowtool
+}}
+
+<form id="import-form">
+<h3>{{lessontitle}}</h3>
+{{#sections}}
+	<h4>{{sectiontitle}}: {{title}}</h4>
+	<input type='checkbox' id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
+	<label for='section_{{section_index}}'>
+		{{label_overwrite}}
+	</label>
+	<br>
+	{{#lessons}}
+		<input type='checkbox' id='lesson_{{id}}' name='lessons[]' value='{{id}}' checked/>
+		<label for='lesson_{{id}}'>
+			{{lessonname}}
+		</label>
+		<br>
+	{{/lessons}}
+{{/sections}}
+
+<h3>{{outcometitle}}</h3>
+{{#outcomes}}
+	<input type='checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
+	<label for='outcome_{{id}}'>
+		{{shortname}} - {{fullname}}
+	</label>
+	<br>
+{{/outcomes}}
+<br>
+<button type="button" id="confirm-import">
+	{{buttontext}}
+</button>
+</form>
+
+
+<script>
+document.getElementById('confirm-import').addEventListener('click', function() {
+    let formData = new FormData(document.getElementById('import-form'));
+
+    fetch('finalize_import.php?courseid={{courseid}}&sesskey={{sesskey}}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        // console.log(response.text());
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            document.body.innerHTML = `<p>${data.message}</p>`;
+        } else {
+            document.body.innerHTML = `<p>{{error_text}}: ${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.log(error);
+        document.body.innerHTML = `<p>{{error_finalize}}.</p>`;
+    });
+});
+</script>
