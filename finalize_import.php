@@ -101,7 +101,7 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
     }
 
     //Clear course change caches so users see changes like section renaming    
-    \cache_helper::purge_by_event('changesincourse', $courseid);
+    course_modinfo::purge_course_cache($courseid);
 
     return ['status' => 'success', 'message' => get_string('import_success','local_courseflowtool').' '.$outcomes_made.' '.get_string('outcomes','local_courseflowtool').', '.$sections_made.' '.get_string('sections','local_courseflowtool').', '.$lessons_made.' '.get_string('lessons','local_courseflowtool').'.'];
 

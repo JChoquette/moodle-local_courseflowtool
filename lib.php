@@ -133,6 +133,7 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
 function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflow_id) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
+    require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
@@ -165,10 +166,11 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     // Step 1: Get the default grade item category for use later
 
     // Retrieve the default grade category
-    $default_category = $DB->get_record('grade_categories', [
-        'courseid' => $courseid,
-        'parent' => null // 0 means "root" category
-    ]);
+    $default_category = $DB->get_record('grade_categories', 
+        ['courseid' => $courseid,
+        'parent' => null],
+        '*',
+        MUST_EXIST);
 
     // Step 2: Get the "lesson" module ID from 'modules' table
     $module = $DB->get_record('modules', ['name' => 'lesson']);
@@ -191,12 +193,12 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $lesson->course = $courseid;
         $lesson->modulename = 'lesson';
         $lesson->section = $section->section;
-        $lesson->show_description = 1;
         $lesson->visible = 1;
         $lesson->name = $lessonname;
         $lesson->available = time(); 
         $lesson->timemodified = time();
         $lesson->introeditor = $introeditor;
+        $lesson->showdescription = 1;
 
         //Step 5: Create the actual module, then fetch the newly created course module
         $new_lesson = create_module($lesson);
@@ -207,15 +209,11 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
             'instance'=>$lessonid,
             'module'=>$module->id
         ]);
+        $context = context_module::instance($cm->id);
 
-        // Step 6: Update the course module to show the description
-        $cm->showdescription=1;
-        $DB->update_record('course_modules',$cm);
-
-        // Step 7: Add a content page to the lesson
+        // Step 6: Add a content page to the lesson
 
         // Get the context of the course module
-        $context = context_module::instance($cm->id);
 
         $contents_editor = [];
         $contents_editor['text'] = $pagecontents;
@@ -232,7 +230,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
         
 
-        //Step 8: Create a mapping between the courseflow id and the Moodle one
+        //Step 7: Create a mapping between the courseflow id and the Moodle one
 
         $DB->insert_record('local_courseflowtool_map', [
             'courseid' => $courseid,
@@ -248,7 +246,20 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $lesson->name = $lessonname;
         $lesson->intro = $lessonintro;
         $lesson->timemodified = time();
-        $DB->update_record('lesson',$lesson);
+
+        $cm = get_coursemodule_from_id('lesson',$DB->get_record('course_modules',[
+            'course'=>$courseid,
+            'instance'=>$lessonid,
+            'module'=>$module->id
+        ])->id);
+        $context = context_module::instance($cm->id);
+
+        $lesson->coursemodule = $cm->id;
+        $lesson->instance = $lessonid;
+        $lesson->mediafile = null;
+
+        lesson_update_instance($lesson,null);
+        \core\event\course_module_updated::create_from_cm($cm,$context)->trigger();
 
         //Update the page if it exists. If it doesn't, the user probably deleted it so we don't create a new one.
         $page = $DB->get_record('lesson_pages',[
@@ -263,7 +274,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         }
     }
 
-    // Step 9: Add the outcomes
+    // Step 8: Add the outcomes
 
     $itemnumber_unique=1000;
 
@@ -333,7 +344,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         
     }
 
-    //Step 10: Remove any outcomes that don't show up in the list
+    //Step 9: Remove any outcomes that don't show up in the list
     $existing_grade_items = $DB->get_records('grade_items', [
         'courseid' => $courseid,
         'itemmodule' => 'lesson',
