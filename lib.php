@@ -93,12 +93,12 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
     $existingsection = $DB->get_record('course_sections', ['section' => $index, 'course' => $courseid]);
 
     // Use Moodle’s course API to create the section
-    if(!$existingsection){
+    if (!$existingsection) {
         $section = course_create_section($courseid);
     }else{
         $section = $existingsection;
     }
-    if($updatedata){
+    if ($updatedata) {
 
         // Define the new section data
         $sectiondata = [
@@ -146,13 +146,13 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
     // Try to get the corresponding lesson
     $thislesson = false;
-    if($existingmap){
+    if ($existingmap) {
         $thislesson = $DB->get_record('lesson', [
             'course' => $courseid,
             'id' => $existingmap->moodle_lessonid,
         ]);
         // If we didn't get a corresponding outcome, our mapping is leading to nothing, delete the mapping. In theory this code should never run.
-        if(!$thislesson){
+        if (!$thislesson) {
             $DB->delete_records('local_courseflowtool_map', [
                 'courseid' => $courseid,
                 'courseflow_id' => $courseflowid,
@@ -178,7 +178,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     }
 
     // If the lesson doesn't already exist
-    if(!$thislesson){
+    if (!$thislesson) {
 
         // Step 3: Create the lesson's intro data
         $introeditor = [];
@@ -262,7 +262,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
             'qtype' => LESSON_PAGE_BRANCHTABLE,
             'prevpageid' => 0,
         ]);
-        if($page){
+        if ($page) {
             $page->title = $pagetitle;
             $page->contents = $pagecontents;
             $DB->update_record('lesson_pages', $page);
@@ -284,7 +284,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
             'courseid' => $courseid,
         ]);
         $outcome = false;
-        if($outcomemap){
+        if ($outcomemap) {
             $outcome = $DB->get_record('grade_outcomes', [
                 'courseid' => $courseid,
                 'id' => $outcomemap->moodle_outcomeid,
@@ -292,7 +292,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         }
 
         // If the outcome doesn't exist, we just skip this outcome.
-        if(!$outcome){
+        if (!$outcome) {
             continue;
         }
         $outcomeidstokeep[] = $outcome->id;
@@ -304,7 +304,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
             'iteminstance' => $lessonid,
             'outcomeid' => $outcome->id,
         ]);
-        if($gradeitem){
+        if ($gradeitem) {
             continue;
         }
 
@@ -383,13 +383,13 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortnametemp, 
 
     // Try to get the corresponding outcome
     $thisoutcome = false;
-    if($existingmap){
+    if ($existingmap) {
         $thisoutcome = $DB->get_record('grade_outcomes', [
             'courseid' => $courseid,
             'id' => $existingmap->moodle_outcomeid,
         ]);
         // If we didn't get a corresponding outcome, our mapping is leading to nothing, delete the mapping. In theory this code should never run because we run cleanup first.
-        if(!$thisoutcome){
+        if (!$thisoutcome) {
             $DB->delete_records('local_courseflowtool_map', [
                 'courseid' => $courseid,
                 'courseflow_id' => $courseflowid,
@@ -403,8 +403,8 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortnametemp, 
     $uniqueshortname = $shortnametemp;
     while ($DB->record_exists('grade_outcomes', ['shortname' => $uniqueshortname, 'courseid' => $courseid])) {
         // If the existing outcome with the same shortname is the one that we are about to update, this isn't a problem.
-        if($thisoutcome){
-            if($thisoutcome->shortname == $uniqueshortname){
+        if ($thisoutcome) {
+            if ($thisoutcome->shortname == $uniqueshortname) {
                 break;
             }
         }
@@ -413,7 +413,7 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortnametemp, 
     }
     $shortname = $uniqueshortname;
 
-    if(!$thisoutcome){
+    if (!$thisoutcome) {
         $outcome = new stdClass();
         $outcome->shortname = $shortname;
         $outcome->fullname = $fullname;

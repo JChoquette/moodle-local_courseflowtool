@@ -56,7 +56,7 @@ class preview_import implements renderable, templatable {
      */
     public function __construct($jsondata, $sesskey, $courseid) {
         // Add section indices into data
-        foreach ($jsondata["sections"] as $i => $section){
+        foreach ($jsondata["sections"] as $i => $section) {
             $jsondata["sections"][$i]["section_index"] = $i;
         }
         $this->json_data = $jsondata;

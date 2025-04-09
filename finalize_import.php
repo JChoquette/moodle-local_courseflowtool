@@ -67,8 +67,13 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
     // Create Sections and Lessons
     foreach ($jsondata['sections'] as $sectionindex => $sectiondata) {
 
-        // Create the section. Unlike lessons or outcomes, this needs to know if the section has been selected directly, since we need to create a new section anyways even if the user has deselected it in the case where we don't have enough sections
-        // We update section_index+1 because the top (0th) section in Moodle is usually for announcements/course info, it isn't one of the "topics"
+        /* Create the section. Unlike lessons or outcomes, this 
+        needs to know if the section has been selected directly, 
+        since we need to create a new section anyways even if the 
+        user has deselected it in the case where we don't have 
+        enough sections. We update section_index+1 because the 
+        top (0th) section in Moodle is usually for 
+        announcements/course info, it isn't one of the "topics" */
         $updatesection = in_array($sectionindex, $selectedsections);
         $section = local_courseflowtool_create_topic(
             $courseid,
@@ -102,7 +107,11 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
     // Clear course change caches so users see changes like section renaming
     course_modinfo::purge_course_cache($courseid);
 
-    return ['status' => 'success', 'message' => get_string('import_success', 'local_courseflowtool').' '.$outcomesmade.' '.get_string('outcomes', 'local_courseflowtool').', '.$sectionsmade.' '.get_string('sections', 'local_courseflowtool').', '.$lessonsmade.' '.get_string('lessons', 'local_courseflowtool').'.'];
+    return ['status' => 'success', 'message' => 
+        get_string('import_success', 'local_courseflowtool').' '.$outcomesmade.' '.
+        get_string('outcomes', 'local_courseflowtool').', '.$sectionsmade.' '.
+        get_string('sections', 'local_courseflowtool').', '.$lessonsmade.' '.
+        get_string('lessons', 'local_courseflowtool').'.'];
 
 }
 

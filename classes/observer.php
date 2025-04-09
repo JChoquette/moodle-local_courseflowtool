@@ -74,7 +74,7 @@ class local_courseflowtool_observer {
         // Get the course module deletion snapshot
         $cmsnapshot = $event->get_record_snapshot('course_modules', $event->objectid);
 
-        if($cmsnapshot && $cmsnapshot->module == $lessonmodule->id){
+        if ($cmsnapshot && $cmsnapshot->module == $lessonmodule->id) {
             $lessonid = $cmsnapshot->instance;
             // Delete mapping for the deleted lesson.
             $DB->delete_records('local_courseflowtool_map', ['moodle_lessonid' => $lessonid, 'type' => 'lesson', 'courseid' => $event->courseid]);
