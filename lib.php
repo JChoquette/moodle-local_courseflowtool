@@ -277,7 +277,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     $outcomeidstokeep = [];
     foreach ($outcomes as $outcomeid) {
 
-        // Get the outcome corresponding to that courseflow outcome id from the DB. 
+        //Get the outcome corresponding to that courseflow outcome id from the DB.
         //Outcomes are created before lessons so this should exist unless the user has deselected the outcome.
         $outcomemap = $DB->get_record('local_courseflowtool_map', [
             'courseflow_id' => $outcomeid,
