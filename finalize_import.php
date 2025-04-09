@@ -44,7 +44,6 @@ ob_start();
  */
 function local_courseflowtool_process_import($json_data,$courseid,$selected_lessons,$selected_outcomes,$selected_sections){
     require_once(__DIR__ . '/lib.php');
-    global $DB, $CFG;
 
     $outcomes_made = 0;
     $sections_made = 0;
@@ -52,10 +51,10 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
 
     local_courseflowtool_cleanup($courseid);
 
-    foreach ($json_data['outcomes'] as $index => $outcome) {
+    foreach ($json_data['outcomes'] as $outcome) {
         if (in_array($outcome["id"], $selected_outcomes)) {
             
-            $created_outcome = local_courseflowtool_add_outcome(
+            local_courseflowtool_add_outcome(
                 $courseid, 
                 $outcome['fullname'],
                 $outcome['shortname'],
@@ -81,7 +80,7 @@ function local_courseflowtool_process_import($json_data,$courseid,$selected_less
 
         $sections_made++;
 
-        foreach ($section_data['lessons'] as $lesson_index => $lesson_data) {
+        foreach ($section_data['lessons'] as $lesson_data) {
             if (in_array($lesson_data["id"], $selected_lessons)) {
                 
                 local_courseflowtool_add_lesson(

@@ -276,7 +276,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
     // Step 8: Add the outcomes
 
-    $itemnumber_unique=1000;
+    $item_number_unique=1000;
 
     //An array of outcome ids that should remain attached at the end
     $outcome_ids_to_keep = [];
@@ -329,7 +329,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $grade_item->courseid = $courseid;
         $grade_item->iteminstance = $lessonid;
         $grade_item->itemmodule = 'lesson';
-        $grade_item->itemnumber = $itemnumber_unique;
+        $grade_item->itemnumber = $item_number_unique;
         $grade_item->itemtype = 'mod';
         $grade_item->itemname = "Lesson - " . $lessonid . " : Outcome " . $outcome->id;
         $grade_item->categoryid = $default_category->id;
@@ -340,7 +340,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         $grade_item->timemodified = time();
 
         $new_grade_item = new grade_item($grade_item);
-        $grade_item_id = $new_grade_item->insert();
+        $new_grade_item->insert();
         
     }
 
