@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Event handlers for when courses and lessons are deleted
@@ -23,9 +23,9 @@
  */
 
 // Define event handlers for CourseFlow tool.
-//We have one observer to delete everything when the course is deleted.
-//We have another to delete mappings when a lesson (or rather its module) is deleted.
-//Deleting an outcome does not trigger an event, sadly. This is instead handled in lib.php's local_courseflowtool_cleanup() function.
+// We have one observer to delete everything when the course is deleted.
+// We have another to delete mappings when a lesson (or rather its module) is deleted.
+// Deleting an outcome does not trigger an event, sadly. This is instead handled in lib.php's local_courseflowtool_cleanup() function.
 $observers = [
     [
         'eventname'   => '\core\event\course_deleted',

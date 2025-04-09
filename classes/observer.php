@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Handles database cleaning when courses or lessons are deleted
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * This class defines methods that respond to course deletion
  * and course module deletion events to remove associated items from
  * the courseflow tool tables
- * 
+ *
  * @package    local_courseflowtool
  * @copyright  2025 Jeremie Choquette
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -65,21 +65,20 @@ class local_courseflowtool_observer {
     public static function handle_lesson_deleted(\core\event\course_module_deleted $event) {
         global $DB;
 
-        //Get the "lesson" module ID from 'modules' table
-        $lesson_module = $DB->get_record('modules', ['name' => 'lesson']);
-        if (!$lesson_module) {
+        // Get the "lesson" module ID from 'modules' table
+        $lessonmodule = $DB->get_record('modules', ['name' => 'lesson']);
+        if (!$lessonmodule) {
             return null;
         }
 
-        //Get the course module deletion snapshot
-        $cm_snapshot = $event->get_record_snapshot('course_modules', $event->objectid);
+        // Get the course module deletion snapshot
+        $cmsnapshot = $event->get_record_snapshot('course_modules', $event->objectid);
 
-        if($cm_snapshot && $cm_snapshot->module == $lesson_module->id){
-            $lessonid = $cm_snapshot->instance;
+        if($cmsnapshot && $cmsnapshot->module == $lessonmodule->id){
+            $lessonid = $cmsnapshot->instance;
             // Delete mapping for the deleted lesson.
             $DB->delete_records('local_courseflowtool_map', ['moodle_lessonid' => $lessonid, 'type' => 'lesson', 'courseid' => $event->courseid]);
         }
-
 
     }
 

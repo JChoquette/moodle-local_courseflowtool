@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Template class for the initial import page
@@ -39,7 +39,7 @@ class import_tool implements renderable, templatable {
     /** @var int $courseid The ID of the course where the import is being performed. */
     private $courseid;
 
-	/**
+    /**
      * Constructor.
      *
      * @param int $courseid The course ID
@@ -60,7 +60,7 @@ class import_tool implements renderable, templatable {
             'sesskey' => sesskey(),
             'jsoninput_placeholder' => get_string('jsoninput_placeholder', 'local_courseflowtool'),
             'jsoninput_button' => get_string('jsoninput_button', 'local_courseflowtool'),
-            'json_process_error' => get_string('json_process_error', 'local_courseflowtool')
+            'json_process_error' => get_string('json_process_error', 'local_courseflowtool'),
         ];
     }
 }

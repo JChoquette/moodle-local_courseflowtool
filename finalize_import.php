@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Finalizes the import, calling lib.php functions to do so
@@ -42,91 +42,91 @@ ob_start();
  * @param array $selected_sections An array of section IDs to be imported.
  * @return array An array containing status (success or error) and a message to be displayed to the user
  */
-function local_courseflowtool_process_import($json_data,$courseid,$selected_lessons,$selected_outcomes,$selected_sections){
+function local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections) {
     require_once(__DIR__ . '/lib.php');
 
-    $outcomes_made = 0;
-    $sections_made = 0;
-    $lessons_made = 0;
+    $outcomesmade = 0;
+    $sectionsmade = 0;
+    $lessonsmade = 0;
 
     local_courseflowtool_cleanup($courseid);
 
-    foreach ($json_data['outcomes'] as $outcome) {
-        if (in_array($outcome["id"], $selected_outcomes)) {
-            
+    foreach ($jsondata['outcomes'] as $outcome) {
+        if (in_array($outcome["id"], $selectedoutcomes)) {
+
             local_courseflowtool_add_outcome(
-                $courseid, 
+                $courseid,
                 $outcome['fullname'],
                 $outcome['shortname'],
                 $outcome['id']
             );
-            $outcomes_made++;
+            $outcomesmade++;
         }
     }
 
     // Create Sections and Lessons
-    foreach ($json_data['sections'] as $section_index => $section_data) {
+    foreach ($jsondata['sections'] as $sectionindex => $sectiondata) {
 
-        //Create the section. Unlike lessons or outcomes, this needs to know if the section has been selected directly, since we need to create a new section anyways even if the user has deselected it in the case where we don't have enough sections
-        //We update section_index+1 because the top (0th) section in Moodle is usually for announcements/course info, it isn't one of the "topics"
-        $update_section = in_array($section_index,$selected_sections);
+        // Create the section. Unlike lessons or outcomes, this needs to know if the section has been selected directly, since we need to create a new section anyways even if the user has deselected it in the case where we don't have enough sections
+        // We update section_index+1 because the top (0th) section in Moodle is usually for announcements/course info, it isn't one of the "topics"
+        $updatesection = in_array($sectionindex, $selectedsections);
         $section = local_courseflowtool_create_topic(
-            $courseid, 
-            $section_data['title'],
-            $section_index+1,
-            $update_section
-            
+            $courseid,
+            $sectiondata['title'],
+            $sectionindex + 1,
+            $updatesection
+
         );
 
-        $sections_made++;
+        $sectionsmade++;
 
-        foreach ($section_data['lessons'] as $lesson_data) {
-            if (in_array($lesson_data["id"], $selected_lessons)) {
-                
+        foreach ($sectiondata['lessons'] as $lessondata) {
+            if (in_array($lessondata["id"], $selectedlessons)) {
+
                 local_courseflowtool_add_lesson(
                     $courseid,
                     $section,
-                    $lesson_data['lessonname'],
-                    $lesson_data['lessonintro'],
-                    $lesson_data['pagetitle'],
-                    $lesson_data['pagecontents'],
-                    $lesson_data['outcomes'],
-                    $lesson_data["id"],
+                    $lessondata['lessonname'],
+                    $lessondata['lessonintro'],
+                    $lessondata['pagetitle'],
+                    $lessondata['pagecontents'],
+                    $lessondata['outcomes'],
+                    $lessondata["id"],
                 );
 
-                $lessons_made++;
+                $lessonsmade++;
             }
         }
     }
 
-    //Clear course change caches so users see changes like section renaming    
+    // Clear course change caches so users see changes like section renaming
     course_modinfo::purge_course_cache($courseid);
 
-    return ['status' => 'success', 'message' => get_string('import_success','local_courseflowtool').' '.$outcomes_made.' '.get_string('outcomes','local_courseflowtool').', '.$sections_made.' '.get_string('sections','local_courseflowtool').', '.$lessons_made.' '.get_string('lessons','local_courseflowtool').'.'];
+    return ['status' => 'success', 'message' => get_string('import_success', 'local_courseflowtool').' '.$outcomesmade.' '.get_string('outcomes', 'local_courseflowtool').', '.$sectionsmade.' '.get_string('sections', 'local_courseflowtool').', '.$lessonsmade.' '.get_string('lessons', 'local_courseflowtool').'.'];
 
 }
 
-//Ensure the data exists in the cache
+// Ensure the data exists in the cache
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
-$json_data = $cache->get('courseflow_import_data') ?? null;
+$jsondata = $cache->get('courseflow_import_data') ?? null;
 
-//Delete the import data from the cache (optional)
-//Currently commented because it's nice to be able to hit refresh on the import and be able to re-import data, but if we want to change this later we can uncomment
-//$cache->delete('import_data');
+// Delete the import data from the cache (optional)
+// Currently commented because it's nice to be able to hit refresh on the import and be able to re-import data, but if we want to change this later we can uncomment
+// $cache->delete('import_data');
 
-if (!$json_data) {
+if (!$jsondata) {
     ob_end_clean();
-    echo json_encode(['message' => get_string('no_data','local_courseflowtool')]);
+    echo json_encode(['message' => get_string('no_data', 'local_courseflowtool')]);
     exit;
 }
 
 
-$selected_lessons = optional_param('lessons', [], PARAM_INT);
-$selected_outcomes = optional_param('outcomes', [], PARAM_INT);
-$selected_sections = optional_param('sections', [], PARAM_INT);
+$selectedlessons = optional_param('lessons', [], PARAM_INT);
+$selectedoutcomes = optional_param('outcomes', [], PARAM_INT);
+$selectedsections = optional_param('sections', [], PARAM_INT);
 
 // Run the import and get the result
-$result = local_courseflowtool_process_import($json_data, $courseid,$selected_lessons,$selected_outcomes,$selected_sections);
+$result = local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections);
 
 
 // Return JSON response

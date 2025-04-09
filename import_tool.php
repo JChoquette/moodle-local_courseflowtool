@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Initial page for the import
@@ -25,7 +25,7 @@
 require_once('../../config.php');
 require_once('lib.php');
 
-//Clear the cache before import just to be safe
+// Clear the cache before import just to be safe
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
 $cache->delete('import_data'); // Ensure clean slate before new import
 
@@ -33,11 +33,11 @@ $courseid = local_courseflowtool_require_course_access();
 
 $PAGE->set_url(new moodle_url('/local/courseflowtool/import_tool.php'));
 $PAGE->set_context(context_system::instance());
-$PAGE->set_title(get_string('json_import_title','local_courseflowtool'));
-$PAGE->set_heading(get_string('json_import_title','local_courseflowtool'));
+$PAGE->set_title(get_string('json_import_title', 'local_courseflowtool'));
+$PAGE->set_heading(get_string('json_import_title', 'local_courseflowtool'));
 
 echo $OUTPUT->header();
 $renderable = new \local_courseflowtool\output\import_tool($courseid);
 echo $OUTPUT->render($renderable);
 echo $OUTPUT->footer();
-?>
+

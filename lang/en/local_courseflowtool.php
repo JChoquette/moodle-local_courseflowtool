@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * English language strings
@@ -26,17 +26,17 @@ $string['pluginname'] = 'CourseFlow Tool';
 $string['courseflowtool:view'] = 'View CourseFlow tool plugin';
 $string['courseflowtool_test'] = 'Test CourseFlow tool plugin';
 
-//import_tool.php
+// import_tool.php
 $string['json_import_title'] = 'Import CourseFlow JSON';
 $string['jsoninput_placeholder'] = 'Paste your JSON here...';
 $string['jsoninput_button'] = 'Import from JSON';
 $string['json_process_error'] = 'Error processing JSON';
 
-//process_json.php
+// process_json.php
 $string['json_process_invalid'] = 'Invalid JSON data.';
 $string['json_process_decode_error'] = 'Error decoding JSON.';
 
-//preview_import.php
+// preview_import.php
 $string['preview_title'] = 'Preview CourseFlow Import';
 $string['section'] = "Section";
 $string['lesson'] = "Lesson";
@@ -48,13 +48,13 @@ $string['label_overwrite'] = 'Overwrite existing topic label (if applicable)';
 $string['confirm_import'] = 'Confirm and Import';
 $string['no_data_preview'] = 'No data to preview. Please go back and upload JSON first.';
 
-//finalize_import.php
+// finalize_import.php
 
 $string['no_data'] = 'No data found in session.';
 $string['error'] = 'Error';
 $string['error_finalize'] = 'Error finalizing import';
 $string['import_success'] = 'Import completed successfully! Created';
 
-//privacy/provider.php
+// privacy/provider.php
 
 $string['privacy:metadata'] = 'No data tied to a specific user is stored. Settings are tied to the Moodle course and its CourseFlow origin course, but not to an individual user. Data input by the user is stored only temporarily during the construction of Moodle objects. It is also not tied to a specific user in any way.';

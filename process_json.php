@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Processes json data entered by the user
@@ -42,7 +42,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 
 if (!$data || empty($data['json'])) {
-    echo json_encode(['message' => get_string('json_process_invalid','local_courseflowtool')]);
+    echo json_encode(['message' => get_string('json_process_invalid', 'local_courseflowtool')]);
     exit;
 }
 
@@ -50,7 +50,7 @@ if (!$data || empty($data['json'])) {
 $json = json_decode($data['json'], true);
 
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(['message' => get_string('json_process_decode_error','local_courseflowtool')]);
+    echo json_encode(['message' => get_string('json_process_decode_error', 'local_courseflowtool')]);
     exit;
 }
 
