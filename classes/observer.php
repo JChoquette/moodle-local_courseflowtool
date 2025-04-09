@@ -60,7 +60,7 @@ class local_courseflowtool_observer {
     /**
      * Handle lesson deletion: clean up mappings in local_courseflowtool_map.
      *
-     * @param \core\event\lesson_deleted $event
+     * @param \core\event\course_module_deleted $event
      */
     public static function handle_lesson_deleted(\core\event\course_module_deleted $event) {
         global $DB;
