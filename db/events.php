@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 // Define event handlers for CourseFlow tool.
 // We have one observer to delete everything when the course is deleted.
 // We have another to delete mappings when a lesson (or rather its module) is deleted.
