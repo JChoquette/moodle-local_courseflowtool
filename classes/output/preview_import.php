@@ -50,7 +50,7 @@ class preview_import implements renderable, templatable {
     /**
      * Constructor.
      *
-     * @param array $json_data The parsed JSON import data.
+     * @param array $jsondata The parsed JSON import data.
      * @param string $sesskey The user's session key.
      * @param int $courseid The course ID.
      */

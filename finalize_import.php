@@ -35,11 +35,11 @@ ob_start();
 /**
  * Processes the imported JSON data and generates lessons, outcomes, and sections for the specified course.
  *
- * @param string $json_data The JSON data representing the course structure from CourseFlow.
+ * @param string $jsondata The JSON data representing the course structure from CourseFlow.
  * @param int $courseid The ID of the course where the items will be imported.
- * @param array $selected_lessons An array of lesson IDs to be imported.
- * @param array $selected_outcomes An array of outcome IDs to be imported.
- * @param array $selected_sections An array of section IDs to be imported.
+ * @param array $selectedlessons An array of lesson IDs to be imported.
+ * @param array $selectedoutcomes An array of outcome IDs to be imported.
+ * @param array $selectedsections An array of section IDs to be imported.
  * @return array An array containing status (success or error) and a message to be displayed to the user
  */
 function local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections) {

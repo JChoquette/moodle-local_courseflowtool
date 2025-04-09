@@ -81,7 +81,7 @@ function local_courseflowtool_extend_settings_navigation($settingsnav, $context)
  * @param int $courseid The ID of the course where the section will be created.
  * @param string $sectionname The name of the section to create or update.
  * @param int $index The section number (starting from 1) where the section will be placed. We don't overwrite the first topic, since it is usually reserved for announcements, etc.
- * @param bool $update_data Whether or not to actually update or alter the data in this.
+ * @param bool $updatedata Whether or not to actually update or alter the data in this.
  *
  * @return stdClass The created or updated section object.
  */
@@ -126,7 +126,7 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
  * @param string $pagetitle The title of the initial content page.
  * @param string $pagecontents The content of the initial page.
  * @param array $outcomes An array of outcome IDs to associate with the lesson.
- * @param int $courseflow_id The CourseFlow ID used for mapping and tracking.
+ * @param int $courseflowid The CourseFlow ID used for mapping and tracking.
  *
  * @return int The ID of the created lesson.
  */
@@ -365,8 +365,8 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
  *
  * @param int $courseid The ID of the course where the outcome will be added.
  * @param string $fullname The full name of the outcome.
- * @param string $shortname_temp A temporary short name for the outcome.
- * @param int $courseflow_id The CourseFlow ID used for mapping and tracking.
+ * @param string $shortnametemp A temporary short name for the outcome.
+ * @param int $courseflowid The CourseFlow ID used for mapping and tracking.
  *
  * @return stdClass The created outcome object.
  */
