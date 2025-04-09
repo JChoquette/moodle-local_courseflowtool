@@ -95,7 +95,7 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
     // Use Moodle’s course API to create the section
     if (!$existingsection) {
         $section = course_create_section($courseid);
-    }else{
+    } else {
         $section = $existingsection;
     }
     if ($updatedata) {
@@ -234,7 +234,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
             'type' => 'lesson',
         ]);
 
-    }else{
+    } else {
         // Update the existing lesson
         $lesson = $thislesson;
         $lessonid = $lesson->id;
@@ -277,7 +277,8 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     $outcomeidstokeep = [];
     foreach ($outcomes as $outcomeid) {
 
-        // Get the outcome corresponding to that courseflow outcome id from the DB. Outcomes are created before lessons so this should exist unless the user has deselected the outcome.
+        // Get the outcome corresponding to that courseflow outcome id from the DB. 
+        //Outcomes are created before lessons so this should exist unless the user has deselected the outcome.
         $outcomemap = $DB->get_record('local_courseflowtool_map', [
             'courseflow_id' => $outcomeid,
             'type' => 'outcome',
@@ -432,7 +433,7 @@ function local_courseflowtool_add_outcome($courseid, $fullname, $shortnametemp, 
             'moodle_outcomeid' => $thisoutcome->id,
             'type' => 'outcome',
         ]);
-    }else{
+    } else {
         $thisoutcome->shortname = $shortname;
         $thisoutcome->fullname = $fullname;
         $DB->update_record('grade_outcomes', $thisoutcome);

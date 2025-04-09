@@ -25,7 +25,7 @@
 }}
 
 <form id="import-form">
-<h3>{{lessontitle}}</h3>
+<h3>{{lessontitle}} </h3>
 {{#sections}}
 	<h4>{{sectiontitle}}: {{title}}</h4>
 	<input type='checkbox' id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
@@ -42,7 +42,7 @@
 	{{/lessons}}
 {{/sections}}
 
-<h3>{{outcometitle}}</h3>
+<h3>{{outcometitle}} </h3>
 {{#outcomes}}
 	<input type='checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
 	<label for='outcome_{{id}}'>
