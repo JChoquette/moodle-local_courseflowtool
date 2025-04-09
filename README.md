@@ -15,12 +15,10 @@ This Moodle plugin provides a tool to import course content from CourseFlow into
 
    ```bash
    cd your-moodle-directory/local
-   git clone https://github.com/YOURUSERNAME/moodle-local_courseflowtool.git courseflowtool
+   git clone https://github.com/JChoquette/moodle-local_courseflowtool.git courseflowtool
    ```
 
 2. Visit your Moodle site in a browser. Moodle will detect the new plugin and prompt you to complete the installation process.
-
-3. After installation, go to Site administration > Plugins > Local plugins to configure settings if needed.
 
 ### Requirements
 
