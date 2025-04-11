@@ -111,6 +111,24 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
     return $section;
 }
 
+/**
+ * Adds styling/wrappers around the lesson description
+ *
+ * @param string $lessonintro The introduction text for the lesson.
+ * @param string $lessonname The name of the lesson.
+ *
+ * @return string The formatted intro
+ */
+function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname) {
+
+    return '<div class="path-local-courseflowtool"><div class="courseflow-lesson-intro">'.
+        '<div class="courseflow-lesson-title">'.
+            $lessonname.
+        '</div><div class="courseflow-lesson-description">'.
+        $lessonintro.
+        '</div>'.
+        '</div></div>';
+}
 
 /**
  * Adds a new lesson to the specified course section.
@@ -136,6 +154,11 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
+
+    //Preparation: add html to the lesson intro
+    $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname);
+
+
 
     // Check for an existing outcome previously created from this courseflow id
     $existingmap = $DB->get_record('local_courseflowtool_map', [

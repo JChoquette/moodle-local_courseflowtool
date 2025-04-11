@@ -1,0 +1,37 @@
+/* 
+ * Styles for the CourseFlow Tool plugin
+ * 
+ * @package   local_courseflowtool
+ */
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool) {
+    border: 1px solid black;
+    background: rgb(237, 74, 40);
+    border-radius:  10px;
+    padding: 0px;
+    padding-top: 10px;
+}
+
+.activity.modtype_lesson.lesson .activity-item .activity-grid:has(.path-local-courseflowtool) {
+    border-radius: 0px 0px 10px 10px;
+    background: white;
+    padding: 10px;
+
+}
+
+/*
+.path-local-courseflowtool .courseflow-lesson-intro {
+    outline: 1px solid black;
+    margin: 1px;
+    border: 5px solid rgb(237, 74, 40);
+    padding: 10px;
+} 
+
+.path-local-courseflowtool .courseflow-lesson-title {
+    font-weight: 600;
+    font-size: medium;
+}
+
+.path-local-courseflowtool .courseflow-lesson-description {
+    padding-left: 10px;
+}*/
