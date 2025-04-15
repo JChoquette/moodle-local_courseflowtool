@@ -25,12 +25,12 @@
 }}
 
 <form id="import-form">
-<h3>{{lessontitle}} </h3>
+<h3>{{#str}} lessons, local_courseflowtool {{/str}} </h3>
 {{#sections}}
-	<h4>{{sectiontitle}}: {{title}}</h4>
+	<h4>{{#str}} sections, local_courseflowtool {{/str}}: {{title}}</h4>
 	<input type='checkbox' id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
 	<label for='section_{{section_index}}'>
-		{{label_overwrite}}
+		{{#str}} label_overwrite, local_courseflowtool {{/str}}
 	</label>
 	<br>
 	{{#lessons}}
@@ -42,7 +42,7 @@
 	{{/lessons}}
 {{/sections}}
 
-<h3>{{outcometitle}} </h3>
+<h3>{{#str}} outcomes, local_courseflowtool {{/str}} </h3>
 {{#outcomes}}
 	<input type='checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
 	<label for='outcome_{{id}}'>
@@ -76,12 +76,12 @@ document.getElementById('confirm-import').addEventListener('click', function() {
         if (data.status === 'success') {
             document.getElementById("import-form").innerHTML = `<p>${data.message}</p>`;
         } else {
-            document.getElementById("import-form").innerHTML = `<p>{{error_text}}: ${data.message}</p>`;
+            document.getElementById("import-form").innerHTML = `<p>{{#str}} error, local_courseflowtool {{/str}}: ${data.message}</p>`;
         }
     })
     .catch(error => {
         console.log(error);
-        document.getElementById("import-form").innerHTML = `<p>{{error_finalize}}.</p>`;
+        document.getElementById("import-form").innerHTML = `<p>{{#str}} error_finalize, local_courseflowtool {{/str}}.</p>`;
     });
 });
 </script>

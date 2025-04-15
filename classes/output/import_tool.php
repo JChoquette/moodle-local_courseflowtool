@@ -60,9 +60,6 @@ class import_tool implements renderable, templatable {
         return [
             'courseid' => $this->courseid,
             'sesskey' => sesskey(),
-            'jsoninput_placeholder' => get_string('jsoninput_placeholder', 'local_courseflowtool'),
-            'jsoninput_button' => get_string('jsoninput_button', 'local_courseflowtool'),
-            'json_process_error' => get_string('json_process_error', 'local_courseflowtool'),
         ];
     }
 }

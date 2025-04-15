@@ -72,12 +72,6 @@ class preview_import implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         return [
-            'lessontitle' => get_string('lessons', 'local_courseflowtool'),
-            'sectiontitle' => get_string('sections', 'local_courseflowtool'),
-            'outcometitle' => get_string('outcomes', 'local_courseflowtool'),
-            'label_overwrite' => get_string('label_overwrite', 'local_courseflowtool'),
-            'error_text' => get_string('error', 'local_courseflowtool'),
-            'error_finalize' => get_string('error_finalize', 'local_courseflowtool'),
             'courseid' => $this->courseid,
 
             'sesskey' => $this->sesskey,
