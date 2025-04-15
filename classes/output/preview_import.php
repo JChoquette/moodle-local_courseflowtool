@@ -73,7 +73,6 @@ class preview_import implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         return [
             'courseid' => $this->courseid,
-
             'sesskey' => $this->sesskey,
             'sections' => $this->jsondata['sections'],
             'outcomes' => $this->jsondata['outcomes'],
