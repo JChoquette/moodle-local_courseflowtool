@@ -51,11 +51,14 @@
 	<br>
 {{/outcomes}}
 <br>
-<button type="button" id="confirm-import">
-	{{buttontext}}
+<button class="btn btn-primary" type="button" id="confirm-import">
+    {{#str}} confirm_import, local_courseflowtool {{/str}}
 </button>
 </form>
-
+<br/>
+<a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">
+    {{#str}} returntocourse, local_courseflowtool {{/str}}
+</a>
 
 <script>
 document.getElementById('confirm-import').addEventListener('click', function() {
@@ -71,14 +74,14 @@ document.getElementById('confirm-import').addEventListener('click', function() {
     })
     .then(data => {
         if (data.status === 'success') {
-            document.body.innerHTML = `<p>${data.message}</p>`;
+            document.getElementById("import-form").innerHTML = `<p>${data.message}</p>`;
         } else {
-            document.body.innerHTML = `<p>{{error_text}}: ${data.message}</p>`;
+            document.getElementById("import-form").innerHTML = `<p>{{error_text}}: ${data.message}</p>`;
         }
     })
     .catch(error => {
         console.log(error);
-        document.body.innerHTML = `<p>{{error_finalize}}.</p>`;
+        document.getElementById("import-form").innerHTML = `<p>{{error_finalize}}.</p>`;
     });
 });
 </script>

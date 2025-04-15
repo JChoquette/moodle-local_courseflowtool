@@ -76,7 +76,6 @@ class preview_import implements renderable, templatable {
             'sectiontitle' => get_string('sections', 'local_courseflowtool'),
             'outcometitle' => get_string('outcomes', 'local_courseflowtool'),
             'label_overwrite' => get_string('label_overwrite', 'local_courseflowtool'),
-            'buttontext' => get_string('confirm_import', 'local_courseflowtool'),
             'error_text' => get_string('error', 'local_courseflowtool'),
             'error_finalize' => get_string('error_finalize', 'local_courseflowtool'),
             'courseid' => $this->courseid,
