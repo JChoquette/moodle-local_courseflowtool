@@ -31,6 +31,7 @@ export const init = ({sesskey, courseid, error_finalize,error_generic}) => {
             body: formData
         })
         .then(response => {
+            // eslint-disable-next-line no-console
             // console.log(response.text());
             return response.json();
         })
@@ -42,8 +43,6 @@ export const init = ({sesskey, courseid, error_finalize,error_generic}) => {
             }
         })
         .catch(error => {
-            // eslint-disable-next-line no-console
-            console.log(error);
             document.getElementById("import-form").innerHTML = `<p>${error_finalize}.</p>`;
         });
     });
