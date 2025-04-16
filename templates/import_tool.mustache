@@ -24,9 +24,9 @@
     @package    local_courseflowtool
 }}
 
-<textarea id="json-input" rows="10" cols="80" placeholder="{{jsoninput_placeholder}}"></textarea>
+<textarea id="json-input" rows="10" cols="80" placeholder="{{#str}} jsoninput_placeholder, local_courseflowtool {{/str}}"></textarea>
 <br>
-<button id="import-button">{{jsoninput_button}}</button>
+<button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
 <div id="response"></div>
 
 <script>
@@ -45,7 +45,7 @@ document.getElementById('import-button').addEventListener('click', function() {
         if(data.redirect)window.location.replace(data.redirect);
     })
     .catch(error => {
-        document.getElementById('response').innerHTML = "{{json_process_error}}";
+        document.getElementById('response').innerHTML = "{{#str}} json_process_error, local_courseflowtool {{/str}}";
     });
 });
 </script>

@@ -184,14 +184,10 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         }
     }
 
-    // Step 1: Get the default grade item category for use later
+    // Step 1: Get the default grade item category for use later, creates one if it doesn't exist
 
     // Retrieve the default grade category
-    $defaultcategory = $DB->get_record('grade_categories',
-        ['courseid' => $courseid,
-        'parent' => null],
-        '*',
-        MUST_EXIST);
+    $defaultcategory = grade_category::fetch_course_category($courseid);
 
     // Step 2: Get the "lesson" module ID from 'modules' table
     $module = $DB->get_record('modules', ['name' => 'lesson']);

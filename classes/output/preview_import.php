@@ -38,7 +38,7 @@ use renderer_base;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class preview_import implements renderable, templatable {
-    /** @var array $json_data Full JSON data structure. */
+    /** @var array $jsondata Full JSON data structure. */
     private $jsondata;
 
     /** @var string $sesskey Moodle session key for security. */
@@ -59,7 +59,7 @@ class preview_import implements renderable, templatable {
         foreach ($jsondata["sections"] as $i => $section) {
             $jsondata["sections"][$i]["section_index"] = $i;
         }
-        $this->json_data = $jsondata;
+        $this->jsondata = $jsondata;
         $this->sesskey = $sesskey;
         $this->courseid = $courseid;
     }
@@ -72,18 +72,10 @@ class preview_import implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         return [
-            'lessontitle' => get_string('lessons', 'local_courseflowtool'),
-            'sectiontitle' => get_string('sections', 'local_courseflowtool'),
-            'outcometitle' => get_string('outcomes', 'local_courseflowtool'),
-            'label_overwrite' => get_string('label_overwrite', 'local_courseflowtool'),
-            'buttontext' => get_string('confirm_import', 'local_courseflowtool'),
-            'error_text' => get_string('error', 'local_courseflowtool'),
-            'error_finalize' => get_string('error_finalize', 'local_courseflowtool'),
             'courseid' => $this->courseid,
-
             'sesskey' => $this->sesskey,
-            'sections' => $this->json_data['sections'],
-            'outcomes' => $this->json_data['outcomes'],
+            'sections' => $this->jsondata['sections'],
+            'outcomes' => $this->jsondata['outcomes'],
         ];
     }
 }

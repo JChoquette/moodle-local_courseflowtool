@@ -130,9 +130,9 @@ if (!$jsondata) {
 }
 
 
-$selectedlessons = optional_param('lessons', [], PARAM_INT);
-$selectedoutcomes = optional_param('outcomes', [], PARAM_INT);
-$selectedsections = optional_param('sections', [], PARAM_INT);
+$selectedlessons = optional_param_array('lessons', [], PARAM_INT);
+$selectedoutcomes = optional_param_array('outcomes', [], PARAM_INT);
+$selectedsections = optional_param_array('sections', [], PARAM_INT);
 
 // Run the import and get the result
 $result = local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections);
