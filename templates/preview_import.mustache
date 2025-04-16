@@ -60,28 +60,11 @@
     {{#str}} returntocourse, local_courseflowtool {{/str}}
 </a>
 
-<script>
-document.getElementById('confirm-import').addEventListener('click', function() {
-    let formData = new FormData(document.getElementById('import-form'));
-
-    fetch('finalize_import.php?courseid={{courseid}}&sesskey={{sesskey}}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        // console.log(response.text());
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            document.getElementById("import-form").innerHTML = `<p>${data.message}</p>`;
-        } else {
-            document.getElementById("import-form").innerHTML = `<p>{{#str}} error, local_courseflowtool {{/str}}: ${data.message}</p>`;
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        document.getElementById("import-form").innerHTML = `<p>{{#str}} error_finalize, local_courseflowtool {{/str}}.</p>`;
-    });
-});
-</script>
+{{#js}}
+require(['local_courseflowtool/PreviewImport'], (module) => module.init({
+    sesskey:"{{sesskey}}",
+    courseid:"{{courseid}}",
+    error_finalize:"{{#str}} error_finalize, local_courseflowtool {{/str}}",
+    error_generic:"{{#str}} error, local_courseflowtool {{/str}}",
+}));
+{{/js}}

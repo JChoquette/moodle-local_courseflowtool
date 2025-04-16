@@ -29,23 +29,12 @@
 <button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
 <div id="response"></div>
 
-<script>
-document.getElementById('import-button').addEventListener('click', function() {
-    let jsonData = document.getElementById('json-input').value;
-    fetch('process_json.php?courseid={{courseid}}&sesskey={{sesskey}}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ json: jsonData })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('response').innerHTML = data.message;
-        if(data.redirect)window.location.replace(data.redirect);
-    })
-    .catch(error => {
-        document.getElementById('response').innerHTML = "{{#str}} json_process_error, local_courseflowtool {{/str}}";
-    });
-});
-</script>
+{{#js}}
+require(['local_courseflowtool/ImportTool'], (module) => module.init({
+    sesskey:"{{sesskey}}",
+    courseid:"{{courseid}}",
+    json_process_error:"{{#str}} json_process_error, local_courseflowtool {{/str}}",
+}));
+{{/js}}
+
+
