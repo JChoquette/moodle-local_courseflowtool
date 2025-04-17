@@ -97,6 +97,9 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
                     $lessondata['pagecontents'],
                     $lessondata['outcomes'],
                     $lessondata["id"],
+                    $lessondata["lessontype_display"],
+                    $lessondata["lessontype"],
+                    $lessondata["colour"],
                 );
 
                 $lessonsmade++;

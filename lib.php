@@ -119,12 +119,18 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
  *
  * @return string The formatted intro
  */
-function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname) {
-
-    return '<div class="path-local-courseflowtool"><div class="courseflow-lesson-intro">'.
-        '<div class="courseflow-lesson-title">'.
-            $lessonname.
-        '</div><div class="courseflow-lesson-description">'.
+function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontypedisplay=null, $lessontype=10, $colour=null) {
+    if($colour === null) {
+        $colourstring = "";
+    } else {
+        $hexcolour = sprintf("#%06X", $colour);
+        $colourstring = 'data-colour="'.$hexcolour.'"';
+    }
+    return '<div class="path-local-courseflowtool"><div class="courseflow-lesson-intro lesson-type-'.
+        $lessontype.
+        '" '.
+        $colourstring.
+        '><div class="courseflow-lesson-description">'.
         $lessonintro.
         '</div>'.
         '</div></div>';
@@ -148,7 +154,7 @@ function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname) {
  *
  * @return int The ID of the created lesson.
  */
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid) {
+function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid, $lessontypedisplay=null, $lessontype=10, $colour=null) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
@@ -156,7 +162,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
     //Preparation: add html to the lesson intro
-    $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname);
+    $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname,$lessontypedisplay, $lessontype,$colour);
 
 
 

@@ -6,10 +6,30 @@
 
 .activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool) {
     border: 1px solid black;
-    background: rgb(237, 74, 40);
     border-radius:  10px;
     padding: 0px;
     padding-top: 10px;
+    background: #04ba74;
+}
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-11 ) {
+    background: rgb(173, 53, 29);
+}
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-12 ) {
+    background: rgb(237, 74, 40);
+}
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-13 ) {
+    background: rgb(237, 137, 52);
+}
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-14 ) {
+    background: rgb(247, 186, 42);
+}
+
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-10 ) {
+    background: rgb(103, 56, 255);
 }
 
 .activity.modtype_lesson.lesson .activity-item .activity-grid:has(.path-local-courseflowtool) {
