@@ -21,7 +21,6 @@
 
 
 /*eslint no-unused-vars: ["error", { "args": "none" }]*/
-//TODO: replace strings passing with get_string()
 export const init = ({sesskey, courseid, error_finalize,error_generic}) => {
     document.getElementById('confirm-import').addEventListener('click', function() {
         let formData = new FormData(document.getElementById('import-form'));

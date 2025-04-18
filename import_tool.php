@@ -25,11 +25,28 @@
 require_once('../../config.php');
 require_once('lib.php');
 
+$courseid = local_courseflowtool_require_course_access();
+
 // Clear the cache before import just to be safe
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
 $cache->delete('import_data'); // Ensure clean slate before new import
 
-$courseid = local_courseflowtool_require_course_access();
+
+// Check if course settings exist for this course.
+$settings = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
+
+if (!$settings) {
+    // Create default settings if none exist.
+    $settings = new stdClass();
+    $settings->courseid = $courseid;
+    $settings->import_url = ''; // Default value, change if needed.
+    $settings->courseflow_style = 0; // Default to no styling.
+    $settings->timecreated = time();
+    $settings->timemodified = time();
+
+    // Insert the new settings into the database.
+    $DB->insert_record('local_courseflowtool_settings', $settings);
+}
 
 $PAGE->set_url(new moodle_url('/local/courseflowtool/import_tool.php'));
 $PAGE->set_context(context_system::instance());
@@ -37,7 +54,7 @@ $PAGE->set_title(get_string('json_import_title', 'local_courseflowtool'));
 $PAGE->set_heading(get_string('json_import_title', 'local_courseflowtool'));
 
 echo $OUTPUT->header();
-$renderable = new \local_courseflowtool\output\import_tool($courseid);
+$renderable = new \local_courseflowtool\output\import_tool($courseid,$settings);
 echo $OUTPUT->render($renderable);
 echo $OUTPUT->footer();
 

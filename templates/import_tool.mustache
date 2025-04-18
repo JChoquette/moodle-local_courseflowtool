@@ -26,7 +26,16 @@
 
 <textarea id="json-input" rows="10" cols="80" placeholder="{{#str}} jsoninput_placeholder, local_courseflowtool {{/str}}"></textarea>
 <br>
+<label for="courseflow-url">{{#str}} url_input_label, local_courseflowtool {{/str}}</label>
+<input type="url" id="courseflow-url" name="courseflow-url" class="form-control" placeholder="https://example.com/data.json" value="{{importurl}}">
+<br>
+<input type="checkbox" id="courseflow-style" name="courseflowstyle" {{#courseflowstyle}}checked{{/courseflowstyle}}>
+<label class="form-check-label" for="courseflow-style">
+    {{#str}} usecourseflowstyle, local_courseflowtool {{/str}}
+</label>
+<br>
 <button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
+<button class="btn btn-primary" id="url-import-button">{{#str}} urlinput_button, local_courseflowtool {{/str}}</button>
 <div id="response"></div>
 
 {{#js}}

@@ -31,6 +31,9 @@ $string['json_import_title'] = 'Import CourseFlow JSON';
 $string['jsoninput_placeholder'] = 'Paste your JSON here...';
 $string['jsoninput_button'] = 'Import from JSON';
 $string['json_process_error'] = 'Error processing JSON';
+$string['usecourseflowstyle'] = 'Use CourseFlow styling for imported lessons';
+$string['url_input_label'] = 'Import from URL';
+$string['urlinput_button'] = 'Import from URL';
 
 // process_json.php
 $string['json_process_invalid'] = 'Invalid JSON data.';

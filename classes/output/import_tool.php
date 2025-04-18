@@ -41,13 +41,18 @@ class import_tool implements renderable, templatable {
     /** @var int $courseid The ID of the course where the import is being performed. */
     private $courseid;
 
+    /** @var array $settings The settings database record. */
+    private $settings;
+
     /**
      * Constructor.
      *
      * @param int $courseid The course ID
+     * @param array $settings The settings for this course
      */
-    public function __construct($courseid) {
+    public function __construct($courseid, $settings) {
         $this->courseid = $courseid;
+        $this->settings = $settings;
     }
 
     /**
@@ -60,6 +65,8 @@ class import_tool implements renderable, templatable {
         return [
             'courseid' => $this->courseid,
             'sesskey' => sesskey(),
+            'courseflowstyle' => $this->settings->courseflow_style,
+            'importurl' => $this->settings->importurl,
         ];
     }
 }

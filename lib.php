@@ -112,14 +112,32 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
 }
 
 /**
+ * Formats the lesson name
+ *
+ * @param string $lessonname The name of the lesson.
+ * @param string $lessontypedisplay The lesson type as a display string.
+ *
+ * @return string The formatted name.
+ */
+function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedisplay=null) {
+    if($lessontypedisplay === null) {
+        return $lessonname;
+    } else {
+        return $lessontypedisplay.': '.$lessonname;
+    }
+}
+
+/**
  * Adds styling/wrappers around the lesson description
  *
  * @param string $lessonintro The introduction text for the lesson.
  * @param string $lessonname The name of the lesson.
+ * @param int $lessontype The lesson type as an integer.
+ * @param int $colour The colour, as a base-10 integer to be converted to hex code.
  *
- * @return string The formatted intro
+ * @return string The formatted intro.
  */
-function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontypedisplay=null, $lessontype=10, $colour=null) {
+function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype=10, $colour=null) {
     if($colour === null) {
         $colourstring = "";
     } else {
@@ -151,22 +169,31 @@ function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $
  * @param string $pagecontents The content of the initial page.
  * @param array $outcomes An array of outcome IDs to associate with the lesson.
  * @param int $courseflowid The CourseFlow ID used for mapping and tracking.
+ * @param string $lessontypedisplay The lesson type as a display string.
+ * @param int $lessontype The lesson type as an integer.
+ * @param int $colour The colour, as a base-10 integer to be converted to hex code.
+ * @param bool $usestyle Whether courseflow styling should be applied.
  *
  * @return int The ID of the created lesson.
  */
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid, $lessontypedisplay=null, $lessontype=10, $colour=null) {
+function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid, $lessontypedisplay=null, $lessontype=10, $colour=null, $usestyle=false) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
+    //
+
     //Preparation: add html to the lesson intro
-    $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname,$lessontypedisplay, $lessontype,$colour);
+    if($usestyle) {
+        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname, $lessontype,$colour);
+    }
 
+    //Preparation: format the lesson name
+    $lessonname = local_courseflowtool_get_lessonname_style($lessonname,$lessontypedisplay);
 
-
-    // Check for an existing outcome previously created from this courseflow id
+    // Check for an existing lesson previously created from this courseflow id
     $existingmap = $DB->get_record('local_courseflowtool_map', [
         'courseflow_id' => $courseflowid,
         'type' => 'lesson',

@@ -32,47 +32,51 @@ require_sesskey();
 
 header('Content-Type: application/json');
 
-
-// Enable error reporting (for debugging)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $data = json_decode(file_get_contents('php://input'), true);
 
-
-if (!$data || empty($data['json'])) {
+if (!$data || (empty($data['json'])) && empty($data['importurl'])) {
     echo json_encode(['message' => get_string('json_process_invalid', 'local_courseflowtool')]);
     exit;
 }
 
-// Decode the JSON string
-$json = json_decode($data['json'], true);
+// Get the import url (if provided)
+$importurl = $data["importurl"];
+
+if ($importurl) {
+    $curl = new curl();
+    $response = $curl->get($importurl);
+    $json_data = json_decode($response, true);
+    echo json_encode(['message' => $response]);
+    exit;
+} else {
+
+    // Decode the JSON string
+    $json = json_decode($data['json'], true);
+
+}
 
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode(['message' => get_string('json_process_decode_error', 'local_courseflowtool')]);
     exit;
 }
 
+
 // Store the JSON in the cache for preview
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
 $cache->set('courseflow_import_data', $json);
 
-// Check if course settings exist for this course.
-$settings = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
 
-if (!$settings) {
-    // Create default settings if none exist.
-    $settings = new stdClass();
-    $settings->courseid = $courseid;
-    $settings->import_url = ''; // Default value, change if needed.
-    $settings->courseflow_style = 0; // Default to no styling.
-    $settings->timecreated = time();
-    $settings->timemodified = time();
+// Determine whether to apply styles
+$usestyle = $data['usestyle'] ? 1 : 0;
 
-    // Insert the new settings into the database.
-    $DB->insert_record('local_courseflowtool_settings', $settings);
+// Update the database
+$record = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
+$record->courseflow_style = $usestyle;
+if($importurl) {
+    $record-> importurl = $importurl;
 }
+$DB->update_record('local_courseflowtool_settings', $record);
+$cache->set('courseflow_use_style', $usestyle);
 
 // Respond with redirect instruction
 echo json_encode(['redirect' => 'preview_import.php?courseid=' .$courseid]);

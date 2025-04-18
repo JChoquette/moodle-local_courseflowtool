@@ -23,16 +23,49 @@
 /*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
 export const init = ({sesskey, courseid, json_process_error}) => {
+    // JSON import button event listener
     document.getElementById('import-button').addEventListener('click', function() {
         let jsonData = document.getElementById('json-input').value;
+        let useStyle = document.getElementById('courseflow-style').checked ?? false;
         fetch(`process_json.php?courseid=${courseid}&sesskey=${sesskey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ json: jsonData })
+            body: JSON.stringify({
+                json: jsonData,
+                usestyle: useStyle,
+            })
         })
         .then(response => response.json())
+        .then(data => {
+            document.getElementById('response').innerHTML = data.message;
+            if(data.redirect){window.location.replace(data.redirect);}
+        })
+        .catch(error => {
+            document.getElementById('response').innerHTML = json_process_error;
+        });
+    });
+    // URL import button event listener
+    document.getElementById('url-import-button').addEventListener('click', function() {
+        let useStyle = document.getElementById('courseflow-style').checked ?? false;
+        let urlInput = document.getElementById("courseflow-url");
+        let importurl = urlInput?.value || '';
+        fetch(`process_json.php?courseid=${courseid}&sesskey=${sesskey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                usestyle: useStyle,
+                importurl:importurl,
+            })
+        })
+        .then(response => {
+            // eslint-disable-next-line no-console
+            console.log(response.text());
+            return response.json();
+        })
         .then(data => {
             document.getElementById('response').innerHTML = data.message;
             if(data.redirect){window.location.replace(data.redirect);}
