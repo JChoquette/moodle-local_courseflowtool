@@ -42,7 +42,7 @@ ob_start();
  * @param array $selectedsections An array of section IDs to be imported.
  * @return array An array containing status (success or error) and a message to be displayed to the user
  */
-function local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections, $usestyle) {
+function local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections, $usestyle, $associateoutcomes) {
     require_once(__DIR__ . '/lib.php');
 
     $outcomesmade = 0;
@@ -86,6 +86,10 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
         $sectionsmade++;
 
         foreach ($sectiondata['lessons'] as $lessondata) {
+            // If we don't want to associate outcomes, set them to an empty array
+            if (!$associateoutcomes){
+                $lessondata['outcomes'] = [];
+            }
             if (in_array($lessondata["id"], $selectedlessons)) {
 
                 local_courseflowtool_add_lesson(
@@ -123,6 +127,7 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
 $jsondata = $cache->get('courseflow_import_data') ?? null;
 $usestyle = $cache->get('courseflow_use_style') ?? false;
+$associateoutcomes = $cache->get('courseflow_associate_outcomes') ?? false;
 
 // Delete the import data from the cache (optional)
 // Currently commented because it's nice to be able to hit refresh on the import and be able to re-import data, but if we want to change this later we can uncomment
@@ -140,7 +145,7 @@ $selectedoutcomes = optional_param_array('outcomes', [], PARAM_INT);
 $selectedsections = optional_param_array('sections', [], PARAM_INT);
 
 // Run the import and get the result
-$result = local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections, $usestyle);
+$result = local_courseflowtool_process_import($jsondata, $courseid, $selectedlessons, $selectedoutcomes, $selectedsections, $usestyle, $associateoutcomes);
 
 
 // Return JSON response

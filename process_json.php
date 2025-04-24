@@ -45,9 +45,7 @@ $importurl = $data["importurl"];
 if ($importurl) {
     $curl = new curl();
     $response = $curl->get($importurl);
-    $json_data = json_decode($response, true);
-    echo json_encode(['message' => $response]);
-    exit;
+    $json = json_decode($response, true);
 } else {
 
     // Decode the JSON string
@@ -60,6 +58,10 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
+//If we imported from a url, we have to grab the data package
+if ($importurl) {
+    $json = $json['data_package'];
+}
 
 // Store the JSON in the cache for preview
 $cache = cache::make('local_courseflowtool', 'courseflow_import_data');
@@ -68,15 +70,19 @@ $cache->set('courseflow_import_data', $json);
 
 // Determine whether to apply styles
 $usestyle = $data['usestyle'] ? 1 : 0;
+// Determine whether or not to associate outcomes
+$associateoutcomes = $data['associateoutcomes'] ? 1 : 0;
 
 // Update the database
 $record = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
 $record->courseflow_style = $usestyle;
+$record->associate_outcomes = $associateoutcomes;
 if($importurl) {
     $record-> importurl = $importurl;
 }
 $DB->update_record('local_courseflowtool_settings', $record);
 $cache->set('courseflow_use_style', $usestyle);
+$cache->set('courseflow_associate_outcomes', $associateoutcomes);
 
 // Respond with redirect instruction
 echo json_encode(['redirect' => 'preview_import.php?courseid=' .$courseid]);

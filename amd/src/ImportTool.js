@@ -27,6 +27,7 @@ export const init = ({sesskey, courseid, json_process_error}) => {
     document.getElementById('import-button').addEventListener('click', function() {
         let jsonData = document.getElementById('json-input').value;
         let useStyle = document.getElementById('courseflow-style').checked ?? false;
+        let associateOutcomes = document.getElementById('associate-outcomes').checked ?? false;
         fetch(`process_json.php?courseid=${courseid}&sesskey=${sesskey}`, {
             method: 'POST',
             headers: {
@@ -35,6 +36,7 @@ export const init = ({sesskey, courseid, json_process_error}) => {
             body: JSON.stringify({
                 json: jsonData,
                 usestyle: useStyle,
+                associateoutcomes: associateOutcomes,
             })
         })
         .then(response => response.json())
@@ -49,6 +51,7 @@ export const init = ({sesskey, courseid, json_process_error}) => {
     // URL import button event listener
     document.getElementById('url-import-button').addEventListener('click', function() {
         let useStyle = document.getElementById('courseflow-style').checked ?? false;
+        let associateOutcomes = document.getElementById('associate-outcomes').checked ?? false;
         let urlInput = document.getElementById("courseflow-url");
         let importurl = urlInput?.value || '';
         fetch(`process_json.php?courseid=${courseid}&sesskey=${sesskey}`, {
@@ -58,12 +61,13 @@ export const init = ({sesskey, courseid, json_process_error}) => {
             },
             body: JSON.stringify({
                 usestyle: useStyle,
+                associateoutcomes: associateOutcomes,
                 importurl:importurl,
             })
         })
         .then(response => {
             // eslint-disable-next-line no-console
-            console.log(response.text());
+            //console.log(response.text());
             return response.json();
         })
         .then(data => {

@@ -41,6 +41,7 @@ if (!$settings) {
     $settings->courseid = $courseid;
     $settings->import_url = ''; // Default value, change if needed.
     $settings->courseflow_style = 0; // Default to no styling.
+    $settings->associate_outcomes = 0; // Default to no association.
     $settings->timecreated = time();
     $settings->timemodified = time();
 

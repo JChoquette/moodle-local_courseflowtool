@@ -32,6 +32,7 @@ $string['jsoninput_placeholder'] = 'Paste your JSON here...';
 $string['jsoninput_button'] = 'Import from JSON';
 $string['json_process_error'] = 'Error processing JSON';
 $string['usecourseflowstyle'] = 'Use CourseFlow styling for imported lessons';
+$string['associateoutcomes'] = 'Associate outcomes with lessons (may create many grade items)';
 $string['url_input_label'] = 'Import from URL';
 $string['urlinput_button'] = 'Import from URL';
 

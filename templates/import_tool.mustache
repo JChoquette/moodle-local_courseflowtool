@@ -34,6 +34,11 @@
     {{#str}} usecourseflowstyle, local_courseflowtool {{/str}}
 </label>
 <br>
+<input type="checkbox" id="associate-outcomes" name="associateoutcomes" {{#associateoutcomes}}checked{{/associateoutcomes}}>
+<label class="form-check-label" for="associate-outcomes">
+    {{#str}} associateoutcomes, local_courseflowtool {{/str}}
+</label>
+<br>
 <button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
 <button class="btn btn-primary" id="url-import-button">{{#str}} urlinput_button, local_courseflowtool {{/str}}</button>
 <div id="response"></div>

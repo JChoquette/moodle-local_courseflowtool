@@ -27,7 +27,10 @@
                 
                 <!-- Boolean to determine if courseflow styling should be applied -->
                 <FIELD NAME="courseflow_style" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" COMMENT="Apply CourseFlow styling (1 for yes, 0 for no)" />
-                
+
+                <!-- Boolean to determine if outcomes should be associated -->
+                <FIELD NAME="associate_outcomes" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+
                 <!-- Future-proofing: Additional fields -->
                 <FIELD NAME="custom_value_1" TYPE="text" NOTNULL="false" COMMENT="Additional future setting 1" />
                 <FIELD NAME="custom_value_2" TYPE="text" NOTNULL="false" COMMENT="Additional future setting 2" />
