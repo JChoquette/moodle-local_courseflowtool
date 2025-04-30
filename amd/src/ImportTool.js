@@ -39,7 +39,11 @@ export const init = ({sesskey, courseid, json_process_error}) => {
                 associateoutcomes: associateOutcomes,
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            // eslint-disable-next-line no-console
+            // console.log(response.text());
+            return response.json();
+        })
         .then(data => {
             document.getElementById('response').innerHTML = data.message;
             if(data.redirect){window.location.replace(data.redirect);}
@@ -67,7 +71,7 @@ export const init = ({sesskey, courseid, json_process_error}) => {
         })
         .then(response => {
             // eslint-disable-next-line no-console
-            //console.log(response.text());
+            // console.log(response.text());
             return response.json();
         })
         .then(data => {

@@ -25,35 +25,48 @@
 }}
 
 <form id="import-form">
+<div style="display: flex; justify-content: space-between; max-width:800px">
+<button class="btn btn-primary" type="button" id="confirm-import">
+    {{#str}} confirm_import, local_courseflowtool {{/str}}
+</button>
+</div>
+<br>
 <h3>{{#str}} lessons, local_courseflowtool {{/str}} </h3>
+<button type="button" class="courseflow-button-minor" id="toggle-lessons">{{#str}} select_all, local_courseflowtool {{/str}}</button>
+<br>
+<div class="courseflow-sections">
 {{#sections}}
-	<h4>{{#str}} sections, local_courseflowtool {{/str}}: {{title}}</h4>
-	<input type='checkbox' id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
+	<h4>{{#str}} section, local_courseflowtool {{/str}}: {{title}}</h4>
+	<input type='checkbox' class="lesson-checkbox" id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
 	<label for='section_{{section_index}}'>
 		{{#str}} label_overwrite, local_courseflowtool {{/str}}
 	</label>
 	<br>
+	<div class="courseflow-lessons">
 	{{#lessons}}
-		<input type='checkbox' id='lesson_{{id}}' name='lessons[]' value='{{id}}' checked/>
+		<input type='checkbox' class='lesson-checkbox' id='lesson_{{id}}' name='lessons[]' value='{{id}}' checked/>
 		<label for='lesson_{{id}}'>
 			{{lessonname}}
+        	{{#exists}}<span class="courseflow-exists-note">(already exists – will be updated)</span>{{/exists}}
 		</label>
 		<br>
 	{{/lessons}}
+	</div>
 {{/sections}}
-
+</div>
 <h3>{{#str}} outcomes, local_courseflowtool {{/str}} </h3>
+<button type="button" class="courseflow-button-minor" id="toggle-outcomes">{{#str}} select_all, local_courseflowtool {{/str}}</button>
+<br>
+<div class="courseflow-sections">
 {{#outcomes}}
-	<input type='checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
+	<input type='checkbox' class='outcome-checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
 	<label for='outcome_{{id}}'>
 		{{shortname}} - {{fullname}}
+        {{#exists}}<span class="courseflow-exists-note">(already exists – will be updated)</span>{{/exists}}
 	</label>
 	<br>
 {{/outcomes}}
-<br>
-<button class="btn btn-primary" type="button" id="confirm-import">
-    {{#str}} confirm_import, local_courseflowtool {{/str}}
-</button>
+</div>
 </form>
 <br>
 <a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">

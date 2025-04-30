@@ -24,6 +24,8 @@
 
 require_once(__DIR__ . '/../../config.php');
 require_once('lib.php');
+global $DB;
+
 $courseid = local_courseflowtool_require_course_access();
 
 $PAGE->set_url(new moodle_url('/local/courseflowtool/preview_import.php'));
@@ -43,6 +45,31 @@ if (!$jsondata) {
     exit;
 }
 
+// The following code checks for existing items, adding to the json so we can display a warning if it will be updated.
+$existingoutcomes = [];
+$existinglessons = [];
+
+$records = $DB->get_records('local_courseflowtool_map', ['courseid' => $courseid]);
+
+// Create arrays for the existing outcomes and lessons
+foreach ($records as $record) {
+    if ($record->type === 'outcome') {
+        $existingoutcomes[] = $record->courseflow_id;
+    } else if ($record->type === 'lesson') {
+        $existinglessons[] = $record->courseflow_id;
+    }
+}
+
+// Check the lessons.
+foreach ($jsondata["sections"] as &$section) {
+    foreach ($section["lessons"] as &$lesson) {
+        $lesson["exists"] = in_array($lesson['id'],$existinglessons);
+    }
+}
+// Check the outcomes.
+foreach ($jsondata["outcomes"] as &$outcome) {
+    $outcome["exists"] = in_array($outcome['id'],$existingoutcomes);
+}
 
 $renderable = new \local_courseflowtool\output\preview_import($jsondata, sesskey(), $courseid);
 echo $OUTPUT->render($renderable);

@@ -45,4 +45,35 @@ export const init = ({sesskey, courseid, error_finalize,error_generic}) => {
             document.getElementById("import-form").innerHTML = `<p>${error_finalize}.</p>`;
         });
     });
+
+    //Toggles the checkboxes on (if not all on) or off (if all off)
+    const toggleCheckboxes = (selector, button, labelCheck, labelUncheck) => {
+        const checkboxes = document.querySelectorAll(selector);
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        checkboxes.forEach((cb) => {
+            cb.checked = !allChecked;
+        });
+    };
+
+    const toggleLessonsBtn = document.getElementById('toggle-lessons');
+    const toggleOutcomesBtn = document.getElementById('toggle-outcomes');
+
+    toggleLessonsBtn.addEventListener('click', () => {
+        toggleCheckboxes(
+            '.lesson-checkbox',
+            toggleLessonsBtn,
+            'Select All Lessons',
+            'Deselect All Lessons'
+        );
+    });
+
+    toggleOutcomesBtn.addEventListener('click', () => {
+        toggleCheckboxes(
+            '.outcome-checkbox',
+            toggleOutcomesBtn,
+            'Select All Outcomes',
+            'Deselect All Outcomes'
+        );
+    });
 };
+

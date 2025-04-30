@@ -24,24 +24,43 @@
     @package    local_courseflowtool
 }}
 
-<textarea id="json-input" rows="10" cols="80" placeholder="{{#str}} jsoninput_placeholder, local_courseflowtool {{/str}}"></textarea>
-<br>
-<label for="courseflow-url">{{#str}} url_input_label, local_courseflowtool {{/str}}</label>
-<input type="url" id="courseflow-url" name="courseflow-url" class="form-control" placeholder="https://example.com/data.json" value="{{importurl}}">
-<br>
-<input type="checkbox" id="courseflow-style" name="courseflowstyle" {{#courseflowstyle}}checked{{/courseflowstyle}}>
-<label class="form-check-label" for="courseflow-style">
-    {{#str}} usecourseflowstyle, local_courseflowtool {{/str}}
-</label>
-<br>
-<input type="checkbox" id="associate-outcomes" name="associateoutcomes" {{#associateoutcomes}}checked{{/associateoutcomes}}>
-<label class="form-check-label" for="associate-outcomes">
-    {{#str}} associateoutcomes, local_courseflowtool {{/str}}
-</label>
-<br>
-<button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
-<button class="btn btn-primary" id="url-import-button">{{#str}} urlinput_button, local_courseflowtool {{/str}}</button>
+<p>{{#str}} general_instructions, local_courseflowtool {{/str}}</p>
+<div style="border-top:1px solid lightgray;border-bottom:1px solid lightgray;margin-top:20px;margin-bottom:20px;padding-top:20px;padding-bottom:20px;">
+    <div>
+        <h3>{{#str}} import_options, local_courseflowtool {{/str}}</h3>
+        <input type="checkbox" id="courseflow-style" name="courseflowstyle" {{#courseflowstyle}}checked{{/courseflowstyle}}>
+        <label class="form-check-label" for="courseflow-style">
+            {{#str}} usecourseflowstyle, local_courseflowtool {{/str}}
+        </label>
+        <br>
+        <input type="checkbox" id="associate-outcomes" name="associateoutcomes" {{#associateoutcomes}}checked{{/associateoutcomes}}>
+        <label class="form-check-label" for="associate-outcomes">
+            {{#str}} associateoutcomes, local_courseflowtool {{/str}}
+        </label>
+    </div>
+</div>
+<div style="display:flex; gap:10px; align-items: stretch;margin-bottom: 20px;">
+    <div style="width: 50%;flex-grow: 1;">
+        <h3>{{#str}} import_json, local_courseflowtool {{/str}}</h3>
+        <p>{{#str}} import_json_instructions, local_courseflowtool {{/str}}</p>
+        <textarea id="json-input" rows="10" cols="80" placeholder="{{#str}} jsoninput_placeholder, local_courseflowtool {{/str}}"></textarea>
+        <br>
+        <button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
+    </div>
+    <div style="border-left:1px solid lightgray;"></div>
+    <div style="width: 50%;flex-grow: 1;">
+        <h3>{{#str}} url_input_label, local_courseflowtool {{/str}}</h3>
+        <p>{{#str}} import_url_instructions, local_courseflowtool {{/str}}</p>
+        <input type="url" id="courseflow-url" name="courseflow-url" class="form-control" placeholder="https://example.com/data.json" value="{{importurl}}">
+        <br>
+        <button class="btn btn-primary" id="url-import-button">{{#str}} urlinput_button, local_courseflowtool {{/str}}</button>
+    </div>
+</div>
 <div id="response"></div>
+<br>
+<a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">
+    {{#str}} returntocourse, local_courseflowtool {{/str}}
+</a>
 
 {{#js}}
 require(['local_courseflowtool/ImportTool'], (module) => module.init({

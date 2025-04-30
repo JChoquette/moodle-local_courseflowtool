@@ -308,6 +308,9 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         lesson_update_instance($lesson, null);
         \core\event\course_module_updated::create_from_cm($cm, $context)->trigger();
 
+        //Move the lesson to the correct place
+        moveto_module($cm, $section);
+
         // Update the page if it exists. If it doesn't, the user probably deleted it so we don't create a new one.
         $page = $DB->get_record('lesson_pages', [
             'lessonid' => $lessonid,

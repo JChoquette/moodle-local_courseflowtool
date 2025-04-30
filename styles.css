@@ -39,19 +39,36 @@
 
 }
 
-/*
-.path-local-courseflowtool .courseflow-lesson-intro {
-    outline: 1px solid black;
-    margin: 1px;
-    border: 5px solid rgb(237, 74, 40);
-    padding: 10px;
-} 
-
-.path-local-courseflowtool .courseflow-lesson-title {
-    font-weight: 600;
-    font-size: medium;
+.path-local-courseflowtool form{
+    color: #444444;
 }
 
-.path-local-courseflowtool .courseflow-lesson-description {
-    padding-left: 10px;
-}*/
+.path-local-courseflowtool input[type="checkbox"]{
+    filter: hue-rotate(300deg) brightness(117%);
+}
+
+.path-local-courseflowtool .courseflow-button-minor{
+    color: #444444;
+    padding: 0;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    padding-bottom: 10px;
+}
+
+.path-local-courseflowtool .btn-primary{
+    color: white;
+    background: #04ba74;
+    border: none;
+}
+
+.path-local-courseflowtool .btn-primary:hover, .path-local-courseflowtool .btn-primary:focus,.path-local-courseflowtool .btn-primary:active{
+    color: white;
+    background: #04ba74;
+    border: none;
+    filter: brightness(80%);
+}
+
+.path-local-courseflowtool .courseflow-sections, .path-local-courseflowtool .courseflow-lessons{
+    padding-left: 20px;
+}

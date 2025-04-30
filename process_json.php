@@ -39,28 +39,25 @@ if (!$data || (empty($data['json'])) && empty($data['importurl'])) {
     exit;
 }
 
-// Get the import url (if provided)
-$importurl = $data["importurl"];
 
-if ($importurl) {
+if (!empty($data['importurl'])) {
+    // Get the import url (if provided)
+    $importurl = $data["importurl"];
     $curl = new curl();
     $response = $curl->get($importurl);
-    $json = json_decode($response, true);
-} else {
-
+    $json_response = json_decode($response, true);
+    $json = $json_response['data_package'];
+} elseif (!empty($data['json'])) {
     // Decode the JSON string
     $json = json_decode($data['json'], true);
-
+} else {
+    echo json_encode(['message' => get_string('json_process_decode_error', 'local_courseflowtool')]);
+    exit;
 }
 
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode(['message' => get_string('json_process_decode_error', 'local_courseflowtool')]);
     exit;
-}
-
-//If we imported from a url, we have to grab the data package
-if ($importurl) {
-    $json = $json['data_package'];
 }
 
 // Store the JSON in the cache for preview
@@ -77,8 +74,8 @@ $associateoutcomes = $data['associateoutcomes'] ? 1 : 0;
 $record = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
 $record->courseflow_style = $usestyle;
 $record->associate_outcomes = $associateoutcomes;
-if($importurl) {
-    $record-> importurl = $importurl;
+if(!empty($data['importurl'])) {
+    $record-> importurl = $data['importurl'];
 }
 $DB->update_record('local_courseflowtool_settings', $record);
 $cache->set('courseflow_use_style', $usestyle);
