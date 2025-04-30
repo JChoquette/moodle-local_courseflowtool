@@ -196,7 +196,6 @@ function local_courseflowtool_add_lesson(
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
-
     // Preparation: add html to the lesson intro
     if ($usestyle) {
         $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype, $colour);

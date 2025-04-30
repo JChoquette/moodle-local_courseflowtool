@@ -23,7 +23,15 @@
  */
 
 
-
+/**
+ * Upgrade script for the local_courseflowtool plugin.
+ *
+ * This function is called when a plugin upgrade is detected. It performs
+ * any necessary database structure changes using the XMLDB system.
+ *
+ * @param int $oldversion The version number of the currently installed plugin.
+ * @return bool Always returns true to indicate success.
+ */
 function xmldb_local_courseflowtool_upgrade($oldversion) {
     global $DB;
 
