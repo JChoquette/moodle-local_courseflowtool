@@ -120,7 +120,7 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
  * @return string The formatted name.
  */
 function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedisplay=null) {
-    if($lessontypedisplay === null) {
+    if ($lessontypedisplay === null) {
         return $lessonname;
     } else {
         return $lessontypedisplay.': '.$lessonname;
@@ -138,7 +138,7 @@ function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedispl
  * @return string The formatted intro.
  */
 function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype=10, $colour=null) {
-    if($colour === null) {
+    if ($colour === null) {
         $colourstring = "";
     } else {
         $hexcolour = sprintf("#%06X", $colour);
@@ -176,22 +176,34 @@ function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $
  *
  * @return int The ID of the created lesson.
  */
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid, $lessontypedisplay=null, $lessontype=10, $colour=null, $usestyle=false) {
+function local_courseflowtool_add_lesson(
+    $courseid,
+    $section,
+    $lessonname,
+    $lessonintro,
+    $pagetitle,
+    $pagecontents,
+    $outcomes,
+    $courseflowid,
+    $lessontypedisplay=null,
+    $lessontype=10,
+    $colour=null,
+    $usestyle=false
+) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
-    //
 
-    //Preparation: add html to the lesson intro
-    if($usestyle) {
-        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro,$lessonname, $lessontype,$colour);
+    // Preparation: add html to the lesson intro
+    if ($usestyle) {
+        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype, $colour);
     }
 
-    //Preparation: format the lesson name
-    $lessonname = local_courseflowtool_get_lessonname_style($lessonname,$lessontypedisplay);
+    // Preparation: format the lesson name
+    $lessonname = local_courseflowtool_get_lessonname_style($lessonname, $lessontypedisplay);
 
     // Check for an existing lesson previously created from this courseflow id
     $existingmap = $DB->get_record('local_courseflowtool_map', [
@@ -308,7 +320,7 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
         lesson_update_instance($lesson, null);
         \core\event\course_module_updated::create_from_cm($cm, $context)->trigger();
 
-        //Move the lesson to the correct place
+        // Move the lesson to the correct place
         moveto_module($cm, $section);
 
         // Update the page if it exists. If it doesn't, the user probably deleted it so we don't create a new one.

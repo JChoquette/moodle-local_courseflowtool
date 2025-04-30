@@ -45,9 +45,9 @@ if (!empty($data['importurl'])) {
     $importurl = $data["importurl"];
     $curl = new curl();
     $response = $curl->get($importurl);
-    $json_response = json_decode($response, true);
-    $json = $json_response['data_package'];
-} elseif (!empty($data['json'])) {
+    $jsonresponse = json_decode($response, true);
+    $json = $jsonresponse['data_package'];
+} else if (!empty($data['json'])) {
     // Decode the JSON string
     $json = json_decode($data['json'], true);
 } else {
@@ -74,8 +74,8 @@ $associateoutcomes = $data['associateoutcomes'] ? 1 : 0;
 $record = $DB->get_record('local_courseflowtool_settings', ['courseid' => $courseid]);
 $record->courseflow_style = $usestyle;
 $record->associate_outcomes = $associateoutcomes;
-if(!empty($data['importurl'])) {
-    $record-> importurl = $data['importurl'];
+if (!empty($data['importurl'])) {
+    $record->importurl = $data['importurl'];
 }
 $DB->update_record('local_courseflowtool_settings', $record);
 $cache->set('courseflow_use_style', $usestyle);

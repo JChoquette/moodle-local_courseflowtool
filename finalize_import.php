@@ -87,7 +87,7 @@ function local_courseflowtool_process_import($jsondata, $courseid, $selectedless
 
         foreach ($sectiondata['lessons'] as $lessondata) {
             // If we don't want to associate outcomes, set them to an empty array
-            if (!$associateoutcomes){
+            if (!$associateoutcomes) {
                 $lessondata['outcomes'] = [];
             }
             if (in_array($lessondata["id"], $selectedlessons)) {

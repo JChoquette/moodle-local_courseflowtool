@@ -55,7 +55,7 @@ $PAGE->set_title(get_string('json_import_title', 'local_courseflowtool'));
 $PAGE->set_heading(get_string('json_import_title', 'local_courseflowtool'));
 
 echo $OUTPUT->header();
-$renderable = new \local_courseflowtool\output\import_tool($courseid,$settings);
+$renderable = new \local_courseflowtool\output\import_tool($courseid, $settings);
 echo $OUTPUT->render($renderable);
 echo $OUTPUT->footer();
 

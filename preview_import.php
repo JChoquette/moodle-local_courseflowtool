@@ -63,12 +63,12 @@ foreach ($records as $record) {
 // Check the lessons.
 foreach ($jsondata["sections"] as &$section) {
     foreach ($section["lessons"] as &$lesson) {
-        $lesson["exists"] = in_array($lesson['id'],$existinglessons);
+        $lesson["exists"] = in_array($lesson['id'], $existinglessons);
     }
 }
 // Check the outcomes.
 foreach ($jsondata["outcomes"] as &$outcome) {
-    $outcome["exists"] = in_array($outcome['id'],$existingoutcomes);
+    $outcome["exists"] = in_array($outcome['id'], $existingoutcomes);
 }
 
 $renderable = new \local_courseflowtool\output\preview_import($jsondata, sesskey(), $courseid);
