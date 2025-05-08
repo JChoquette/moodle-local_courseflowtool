@@ -72,3 +72,12 @@
 .path-local-courseflowtool .courseflow-sections, .path-local-courseflowtool .courseflow-lessons{
     padding-left: 20px;
 }
+
+.path-local-courseflowtool .courseflow-screenshot{
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    margin: 20px;
+}

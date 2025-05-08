@@ -137,7 +137,7 @@ function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedispl
  *
  * @return string The formatted intro.
  */
-function local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype=10, $colour=null) {
+function local_courseflowtool_get_lessonintro_style($lessonintro, $lessontype=10, $colour=null) {
     if ($colour === null) {
         $colourstring = "";
     } else {
@@ -198,7 +198,7 @@ function local_courseflowtool_add_lesson(
 
     // Preparation: add html to the lesson intro
     if ($usestyle) {
-        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro, $lessonname, $lessontype, $colour);
+        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro, $lessontype, $colour);
     }
 
     // Preparation: format the lesson name
