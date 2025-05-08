@@ -1,54 +1,53 @@
 /* 
  * Styles for the CourseFlow Tool plugin
- * 
+ *
  * @package   local_courseflowtool
  */
 
 .activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool) {
     border: 1px solid black;
-    border-radius:  10px;
-    padding: 0px;
+    border-radius: 10px;
+    padding: 0;
     padding-top: 10px;
     background: #04ba74;
 }
 
-.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-11 ) {
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-11) {
     background: rgb(173, 53, 29);
 }
 
-.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-12 ) {
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-12) {
     background: rgb(237, 74, 40);
 }
 
-.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-13 ) {
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-13) {
     background: rgb(237, 137, 52);
 }
 
-.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-14 ) {
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-14) {
     background: rgb(247, 186, 42);
 }
 
-.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-10 ) {
+.activity.modtype_lesson.lesson .activity-item:has(.path-local-courseflowtool .lesson-type-10) {
     background: rgb(103, 56, 255);
 }
 
 .activity.modtype_lesson.lesson .activity-item .activity-grid:has(.path-local-courseflowtool) {
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0 0 10px 10px;
     background: white;
     padding: 10px;
-
 }
 
-.path-local-courseflowtool form{
-    color: #444444;
+.path-local-courseflowtool form {
+    color: #444;
 }
 
-.path-local-courseflowtool input[type="checkbox"]{
+.path-local-courseflowtool input[type="checkbox"] {
     filter: hue-rotate(300deg) brightness(117%);
 }
 
-.path-local-courseflowtool .courseflow-button-minor{
-    color: #444444;
+.path-local-courseflowtool .courseflow-button-minor {
+    color: #444;
     padding: 0;
     background: none;
     border: none;
@@ -56,24 +55,27 @@
     padding-bottom: 10px;
 }
 
-.path-local-courseflowtool .btn-primary{
+.path-local-courseflowtool .btn-primary {
     color: white;
     background: #04ba74;
     border: none;
 }
 
-.path-local-courseflowtool .btn-primary:hover, .path-local-courseflowtool .btn-primary:focus,.path-local-courseflowtool .btn-primary:active{
+.path-local-courseflowtool .btn-primary:hover,
+.path-local-courseflowtool .btn-primary:focus,
+.path-local-courseflowtool .btn-primary:active {
     color: white;
     background: #04ba74;
     border: none;
     filter: brightness(80%);
 }
 
-.path-local-courseflowtool .courseflow-sections, .path-local-courseflowtool .courseflow-lessons{
+.path-local-courseflowtool .courseflow-sections,
+.path-local-courseflowtool .courseflow-lessons {
     padding-left: 20px;
 }
 
-.path-local-courseflowtool .courseflow-screenshot{
+.path-local-courseflowtool .courseflow-screenshot {
     border: 1px solid lightgrey;
     border-radius: 10px;
     padding: 5px;
