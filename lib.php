@@ -131,7 +131,6 @@ function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedispl
  * Adds styling/wrappers around the lesson description
  *
  * @param string $lessonintro The introduction text for the lesson.
- * @param string $lessonname The name of the lesson.
  * @param int $lessontype The lesson type as an integer.
  * @param int $colour The colour, as a base-10 integer to be converted to hex code.
  *

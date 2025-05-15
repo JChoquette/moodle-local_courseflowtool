@@ -47,9 +47,9 @@ class help_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         GLOBAL $CFG;
-        
+
         return [
-            'screenshoturl' => $CFG->wwwroot . '/local/courseflowtool/pix/screenshots/'
+            'screenshoturl' => $CFG->wwwroot . '/local/courseflowtool/pix/screenshots/',
         ];
     }
 }
