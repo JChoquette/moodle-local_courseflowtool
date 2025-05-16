@@ -24,12 +24,17 @@
     @package    local_courseflowtool
 }}
 
-<form id="import-form">
-<div style="display: flex; justify-content: space-between; max-width:800px">
-<button class="btn btn-primary" type="button" id="confirm-import">
-    {{#str}} confirm_import, local_courseflowtool {{/str}}
-</button>
+<div style="display: flex;align-items: stretch;gap: 10px;">
+    <a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary button-with-icon">
+        {{#pix}} i/previous, core {{/pix}}
+        {{#str}} returntocourse, local_courseflowtool {{/str}}
+    </a>
+    <a href="{{config.wwwroot}}/local/courseflowtool/help_page.php" target="_blank" class="btn btn-secondary button-with-icon">
+        {{#pix}} a/help, core {{/pix}}
+        {{#str}} open_help_page, local_courseflowtool {{/str}}
+    </a>
 </div>
+<form id="import-form">
 <br>
 <h3>{{#str}} lessons, local_courseflowtool {{/str}} </h3>
 <button type="button" class="courseflow-button-minor" id="toggle-lessons">{{#str}} select_all, local_courseflowtool {{/str}}</button>
@@ -67,11 +72,14 @@
 	<br>
 {{/outcomes}}
 </div>
+<div style="display: flex; justify-content: space-between; max-width:800px">
+<button class="btn btn-primary button-with-icon" type="button" id="confirm-import">
+    {{#str}} confirm_import, local_courseflowtool {{/str}}
+    {{#pix}} i/next, core {{/pix}}
+</button>
+</div>
 </form>
 <br>
-<a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">
-    {{#str}} returntocourse, local_courseflowtool {{/str}}
-</a>
 
 {{#js}}
 require(['local_courseflowtool/PreviewImport'], (module) => module.init({

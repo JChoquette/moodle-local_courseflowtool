@@ -83,3 +83,13 @@
     height: auto;
     margin: 20px;
 }
+
+.path-local-courseflowtool .button-with-icon{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.path-local-courseflowtool .button-with-icon .icon{
+    margin-right: 0;
+}

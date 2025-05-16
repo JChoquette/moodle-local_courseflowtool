@@ -24,9 +24,17 @@
     @package    local_courseflowtool
 }}
 
-<p>{{#str}} general_instructions, local_courseflowtool {{/str}}</p><a href="{{config.wwwroot}}/local/courseflowtool/help_page.php" target="_blank" class="btn btn-secondary">
-    {{#str}} open_help_page, local_courseflowtool {{/str}}
-</a>
+<div style="display: flex;align-items: stretch;gap: 10px;">
+    <a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary button-with-icon">
+        {{#pix}} i/previous, core {{/pix}}
+        {{#str}} returntocourse, local_courseflowtool {{/str}}
+    </a>
+    <a href="{{config.wwwroot}}/local/courseflowtool/help_page.php" target="_blank" class="btn btn-secondary button-with-icon">
+        {{#pix}} a/help, core {{/pix}}
+        {{#str}} open_help_page, local_courseflowtool {{/str}}
+    </a>
+</div>
+<p>{{#str}} general_instructions, local_courseflowtool {{/str}}</p>
 <div style="border-top:1px solid lightgray;border-bottom:1px solid lightgray;margin-top:20px;margin-bottom:20px;padding-top:20px;padding-bottom:20px;">
     <div>
         <h3>{{#str}} import_options, local_courseflowtool {{/str}}</h3>
@@ -47,7 +55,10 @@
         <p>{{#str}} import_json_instructions, local_courseflowtool {{/str}}</p>
         <textarea id="json-input" rows="10" cols="80" placeholder="{{#str}} jsoninput_placeholder, local_courseflowtool {{/str}}"></textarea>
         <br>
-        <button class="btn btn-primary" id="import-button">{{#str}} jsoninput_button, local_courseflowtool {{/str}}</button>
+        <button class="btn btn-primary button-with-icon" id="import-button">
+            {{#str}} jsoninput_button, local_courseflowtool {{/str}}
+            {{#pix}} i/next, core {{/pix}}
+        </button>
     </div>
     <div style="border-left:1px solid lightgray;"></div>
     <div style="width: 50%;flex-grow: 1;">
@@ -55,20 +66,20 @@
         <p>{{#str}} import_url_instructions, local_courseflowtool {{/str}}</p>
         <input type="url" id="courseflow-url" name="courseflow-url" class="form-control" placeholder="https://example.com/data.json" value="{{importurl}}">
         <br>
-        <button class="btn btn-primary" id="url-import-button">{{#str}} urlinput_button, local_courseflowtool {{/str}}</button>
+        <button class="btn btn-primary button-with-icon" id="url-import-button">
+            {{#str}} urlinput_button, local_courseflowtool {{/str}}
+            {{#pix}} i/next, core {{/pix}}
+        </button>
     </div>
 </div>
 <div id="response"></div>
 <br>
-<a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">
-    {{#str}} returntocourse, local_courseflowtool {{/str}}
-</a>
 
 {{#js}}
 require(['local_courseflowtool/ImportTool'], (module) => module.init({
-    sesskey:"{{sesskey}}",
-    courseid:"{{courseid}}",
-    json_process_error:"{{#str}} json_process_error, local_courseflowtool {{/str}}",
+    sesskey: "{{sesskey}}",
+    courseid: "{{courseid}}",
+    json_process_error: "{{#str}} json_process_error, local_courseflowtool {{/str}}",
 }));
 {{/js}}
 
