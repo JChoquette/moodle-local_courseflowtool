@@ -30,17 +30,17 @@ This Moodle plugin provides a tool to import course content from CourseFlow into
 
 1. Go to a course where you want to import content.
 
-1. In the administration blocks in the left sidebar, you will see CourseFlow Import under the "More" menu.
+2. In the administration blocks in the left sidebar, you will see CourseFlow Import under the "More" menu.
 
-2. Click the link to open the import tool.
+3. Click the link to open the import tool.
 
-3. Paste your CourseFlow-generated JSON data into the text box.
+4. Paste your CourseFlow-generated JSON data into the text box.
 
-4. Click the Import button to preview your data.
+5. Click the Import button to preview your data.
 
-5. Select the items you want to import, then click Confirm and Import.
+6. Select the items you want to import, then click Confirm and Import.
 
-6. The plugin will create the appropriate sections, lessons, and outcomes in your course based on the JSON structure.
+7. The plugin will create the appropriate sections, lessons, and outcomes in your course based on the JSON structure.
 
 
 ### License
