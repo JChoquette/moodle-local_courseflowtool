@@ -1,0 +1,59 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_courseflowtool/help_page
+
+    This template is used to render the help page in the CourseFlow tool plugin.
+
+    @copyright  2025 Jeremie Choquette
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+    @package    local_courseflowtool
+}}
+
+<div class="local-courseflowtool-help">
+  <h1>{{#str}} help_title, local_courseflowtool {{/str}}</h1>
+
+  <p>{{#str}} help_intro, local_courseflowtool {{/str}}<a href= "https://mydalite.org/en/course-flow/home"> https://mydalite.org/en/course-flow/home</a>.</p>
+
+  <h2>{{#str}} help_step1_title, local_courseflowtool {{/str}}</h2>
+  <p>{{#str}} help_courseflow, local_courseflowtool {{/str}}</p>
+  <img class="courseflow-screenshot" src="{{screenshoturl}}courseflow_plugin.png" alt="{{#str}} help_intro_image_alt, local_courseflowtool {{/str}}">
+
+  <h2>{{#str}} help_step2_title, local_courseflowtool {{/str}}</h2>
+  <p>{{#str}} help_step2-1_desc, local_courseflowtool {{/str}}</p>
+  <img class="courseflow-screenshot" src="{{screenshoturl}}course_navigation.png" alt="{{#str}} help_step2-1_image_alt, local_courseflowtool {{/str}}">
+  <p>{{#str}} help_step2-2_desc, local_courseflowtool {{/str}}</p>
+  <img class="courseflow-screenshot" src="{{screenshoturl}}import_json.png" alt="{{#str}} help_step2-2_image_alt, local_courseflowtool {{/str}}">
+  <img class="courseflow-screenshot" src="{{screenshoturl}}import_url.png" alt="{{#str}} help_step2-2_image_alt, local_courseflowtool {{/str}}">
+
+  <p>{{#str}} help_options_desc, local_courseflowtool {{/str}}</p>
+
+  <ul>
+    <li>{{#str}} help_option_styling, local_courseflowtool {{/str}}</li>
+    <li>{{#str}} help_option_outcomes, local_courseflowtool {{/str}}</li>
+  </ul>
+
+  <img class="courseflow-screenshot" src="{{screenshoturl}}import_options.png" alt="{{#str}} help_step2-2_image_alt, local_courseflowtool {{/str}}">
+  
+  <h2>{{#str}} help_step3_title, local_courseflowtool {{/str}}</h2>
+  <p>{{#str}} help_step3_desc, local_courseflowtool {{/str}}</p>
+  <img class="courseflow-screenshot" src="{{screenshoturl}}preview_import.png" alt="{{#str}} help_step3_image_alt, local_courseflowtool {{/str}}">
+
+  <h2>{{#str}} help_confirm_title, local_courseflowtool {{/str}}</h2>
+  <p>{{#str}} help_confirm_desc, local_courseflowtool {{/str}}</p>
+
+</div>

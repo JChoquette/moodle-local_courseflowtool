@@ -111,6 +111,47 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
     return $section;
 }
 
+/**
+ * Formats the lesson name
+ *
+ * @param string $lessonname The name of the lesson.
+ * @param string $lessontypedisplay The lesson type as a display string.
+ *
+ * @return string The formatted name.
+ */
+function local_courseflowtool_get_lessonname_style($lessonname, $lessontypedisplay=null) {
+    if ($lessontypedisplay === null) {
+        return $lessonname;
+    } else {
+        return $lessontypedisplay.': '.$lessonname;
+    }
+}
+
+/**
+ * Adds styling/wrappers around the lesson description
+ *
+ * @param string $lessonintro The introduction text for the lesson.
+ * @param int $lessontype The lesson type as an integer.
+ * @param int $colour The colour, as a base-10 integer to be converted to hex code.
+ *
+ * @return string The formatted intro.
+ */
+function local_courseflowtool_get_lessonintro_style($lessonintro, $lessontype=10, $colour=null) {
+    if ($colour === null) {
+        $colourstring = "";
+    } else {
+        $hexcolour = sprintf("#%06X", $colour);
+        $colourstring = 'data-colour="'.$hexcolour.'"';
+    }
+    return '<div class="path-local-courseflowtool"><div class="courseflow-lesson-intro lesson-type-'.
+        $lessontype.
+        '" '.
+        $colourstring.
+        '><div class="courseflow-lesson-description">'.
+        $lessonintro.
+        '</div>'.
+        '</div></div>';
+}
 
 /**
  * Adds a new lesson to the specified course section.
@@ -127,17 +168,42 @@ function local_courseflowtool_create_topic($courseid, $sectionname, $index, $upd
  * @param string $pagecontents The content of the initial page.
  * @param array $outcomes An array of outcome IDs to associate with the lesson.
  * @param int $courseflowid The CourseFlow ID used for mapping and tracking.
+ * @param string $lessontypedisplay The lesson type as a display string.
+ * @param int $lessontype The lesson type as an integer.
+ * @param int $colour The colour, as a base-10 integer to be converted to hex code.
+ * @param bool $usestyle Whether courseflow styling should be applied.
  *
  * @return int The ID of the created lesson.
  */
-function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $lessonintro, $pagetitle, $pagecontents, $outcomes, $courseflowid) {
+function local_courseflowtool_add_lesson(
+    $courseid,
+    $section,
+    $lessonname,
+    $lessonintro,
+    $pagetitle,
+    $pagecontents,
+    $outcomes,
+    $courseflowid,
+    $lessontypedisplay=null,
+    $lessontype=10,
+    $colour=null,
+    $usestyle=false
+) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/mod/lesson/locallib.php');
     require_once($CFG->dirroot . '/mod/lesson/lib.php');
     require_once($CFG->dirroot . '/course/lib.php');
     require_once($CFG->dirroot . '/mod/lesson/pagetypes/branchtable.php');
 
-    // Check for an existing outcome previously created from this courseflow id
+    // Preparation: add html to the lesson intro
+    if ($usestyle) {
+        $lessonintro = local_courseflowtool_get_lessonintro_style($lessonintro, $lessontype, $colour);
+    }
+
+    // Preparation: format the lesson name
+    $lessonname = local_courseflowtool_get_lessonname_style($lessonname, $lessontypedisplay);
+
+    // Check for an existing lesson previously created from this courseflow id
     $existingmap = $DB->get_record('local_courseflowtool_map', [
         'courseflow_id' => $courseflowid,
         'type' => 'lesson',
@@ -251,6 +317,9 @@ function local_courseflowtool_add_lesson($courseid, $section, $lessonname, $less
 
         lesson_update_instance($lesson, null);
         \core\event\course_module_updated::create_from_cm($cm, $context)->trigger();
+
+        // Move the lesson to the correct place
+        moveto_module($cm, $section);
 
         // Update the page if it exists. If it doesn't, the user probably deleted it so we don't create a new one.
         $page = $DB->get_record('lesson_pages', [

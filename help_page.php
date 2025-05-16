@@ -15,17 +15,21 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * CourseFlow Import Tool for Moodle
+ * Help page for the import
  *
  * @package    local_courseflowtool
  * @copyright  2025 Jeremie Choquette
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once('../../config.php');
 
-$plugin->component = 'local_courseflowtool';
-$plugin->version = 2025042401; // YYYYMMDDXX format.
-$plugin->requires = 2022112800; // Requires Moodle 4.1 or later.
-$plugin->maturity = MATURITY_ALPHA; // Change to MATURITY_STABLE when finalized.
-$plugin->release = '1.1.0';
+$PAGE->set_url(new moodle_url('/local/courseflowtool/help_page.php'));
+$PAGE->set_context(context_system::instance());
+$PAGE->set_title(get_string('json_import_title', 'local_courseflowtool'));
+$PAGE->set_heading(get_string('json_import_title', 'local_courseflowtool'));
+
+echo $OUTPUT->header();
+$renderable = new \local_courseflowtool\output\help_page();
+echo $OUTPUT->render($renderable);
+echo $OUTPUT->footer();

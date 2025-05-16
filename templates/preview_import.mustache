@@ -24,64 +24,68 @@
     @package    local_courseflowtool
 }}
 
+<div style="display: flex;align-items: stretch;gap: 10px;">
+    <a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary button-with-icon">
+        {{#pix}} i/previous, core {{/pix}}
+        {{#str}} returntocourse, local_courseflowtool {{/str}}
+    </a>
+    <a href="{{config.wwwroot}}/local/courseflowtool/help_page.php" target="_blank" class="btn btn-secondary button-with-icon">
+        {{#pix}} a/help, core {{/pix}}
+        {{#str}} open_help_page, local_courseflowtool {{/str}}
+    </a>
+</div>
 <form id="import-form">
+<br>
 <h3>{{#str}} lessons, local_courseflowtool {{/str}} </h3>
+<button type="button" class="courseflow-button-minor" id="toggle-lessons">{{#str}} select_all, local_courseflowtool {{/str}}</button>
+<br>
+<div class="courseflow-sections">
 {{#sections}}
-	<h4>{{#str}} sections, local_courseflowtool {{/str}}: {{title}}</h4>
-	<input type='checkbox' id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
+	<h4>{{#str}} section, local_courseflowtool {{/str}}: {{title}}</h4>
+	<input type='checkbox' class="lesson-checkbox" id='section_{{section_index}}' name='sections[]' value='{{section_index}}' checked />
 	<label for='section_{{section_index}}'>
 		{{#str}} label_overwrite, local_courseflowtool {{/str}}
 	</label>
 	<br>
+	<div class="courseflow-lessons">
 	{{#lessons}}
-		<input type='checkbox' id='lesson_{{id}}' name='lessons[]' value='{{id}}' checked/>
+		<input type='checkbox' class='lesson-checkbox' id='lesson_{{id}}' name='lessons[]' value='{{id}}' checked/>
 		<label for='lesson_{{id}}'>
 			{{lessonname}}
+        	{{#exists}}<span class="courseflow-exists-note">(already exists – will be updated)</span>{{/exists}}
 		</label>
 		<br>
 	{{/lessons}}
+	</div>
 {{/sections}}
-
+</div>
 <h3>{{#str}} outcomes, local_courseflowtool {{/str}} </h3>
+<button type="button" class="courseflow-button-minor" id="toggle-outcomes">{{#str}} select_all, local_courseflowtool {{/str}}</button>
+<br>
+<div class="courseflow-sections">
 {{#outcomes}}
-	<input type='checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
+	<input type='checkbox' class='outcome-checkbox' id='outcome_{{id}}' name='outcomes[]' value='{{id}}' checked/>
 	<label for='outcome_{{id}}'>
 		{{shortname}} - {{fullname}}
+        {{#exists}}<span class="courseflow-exists-note">(already exists – will be updated)</span>{{/exists}}
 	</label>
 	<br>
 {{/outcomes}}
-<br>
-<button class="btn btn-primary" type="button" id="confirm-import">
+</div>
+<div style="display: flex; justify-content: space-between; max-width:800px">
+<button class="btn btn-primary button-with-icon" type="button" id="confirm-import">
     {{#str}} confirm_import, local_courseflowtool {{/str}}
+    {{#pix}} i/next, core {{/pix}}
 </button>
+</div>
 </form>
 <br>
-<a href="{{{config.wwwroot}}}/course/view.php?id={{courseid}}" class="btn btn-primary">
-    {{#str}} returntocourse, local_courseflowtool {{/str}}
-</a>
 
-<script>
-document.getElementById('confirm-import').addEventListener('click', function() {
-    let formData = new FormData(document.getElementById('import-form'));
-
-    fetch('finalize_import.php?courseid={{courseid}}&sesskey={{sesskey}}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        // console.log(response.text());
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            document.getElementById("import-form").innerHTML = `<p>${data.message}</p>`;
-        } else {
-            document.getElementById("import-form").innerHTML = `<p>{{#str}} error, local_courseflowtool {{/str}}: ${data.message}</p>`;
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        document.getElementById("import-form").innerHTML = `<p>{{#str}} error_finalize, local_courseflowtool {{/str}}.</p>`;
-    });
-});
-</script>
+{{#js}}
+require(['local_courseflowtool/PreviewImport'], (module) => module.init({
+    sesskey: "{{sesskey}}",
+    courseid: "{{courseid}}",
+    error_finalize: "{{#str}} error_finalize, local_courseflowtool {{/str}}",
+    error_generic: "{{#str}} error, local_courseflowtool {{/str}}",
+}));
+{{/js}}

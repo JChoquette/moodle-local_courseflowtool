@@ -15,17 +15,41 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * CourseFlow Import Tool for Moodle
+ * Help page renderer for the CourseFlow Import Tool.
  *
  * @package    local_courseflowtool
  * @copyright  2025 Jeremie Choquette
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_courseflowtool\output;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_courseflowtool';
-$plugin->version = 2025042401; // YYYYMMDDXX format.
-$plugin->requires = 2022112800; // Requires Moodle 4.1 or later.
-$plugin->maturity = MATURITY_ALPHA; // Change to MATURITY_STABLE when finalized.
-$plugin->release = '1.1.0';
+use renderable;
+use templatable;
+use renderer_base;
+
+/**
+ * Class help_page
+ *
+ * Renders the help page using a mustache template.
+ *
+ * @package    local_courseflowtool
+ */
+class help_page implements renderable, templatable {
+
+    /**
+     * Export this data so it can be used as the context for a mustache template.
+     *
+     * @param renderer_base $output Renderer base.
+     * @return stdClass
+     */
+    public function export_for_template(renderer_base $output) {
+        GLOBAL $CFG;
+
+        return [
+            'screenshoturl' => $CFG->wwwroot . '/local/courseflowtool/pix/screenshots/',
+        ];
+    }
+}
