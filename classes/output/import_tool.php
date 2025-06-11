@@ -67,7 +67,7 @@ class import_tool implements renderable, templatable {
             'sesskey' => sesskey(),
             'courseflowstyle' => $this->settings->courseflow_style,
             'associateoutcomes' => $this->settings->associate_outcomes,
-            'importurl' => $this->settings->importurl,
+            'importurl' => $this->settings->importurl ?? '',
         ];
     }
 }
