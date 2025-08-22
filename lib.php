@@ -48,7 +48,7 @@ function local_courseflowtool_require_course_access() {
  * Extends the settings navigation for the course.
  *
  * Adds additional settings options related to the CourseFlow import tool
- * to the course navigation block, if the user has the appropriate permissions.
+ * to the course administration block, if the user has the appropriate permissions.
  *
  * @param navigation_node $settingsnav The settings navigation node to extend.
  * @param context $context The context of the course where the navigation is being extended.
@@ -58,18 +58,20 @@ function local_courseflowtool_extend_settings_navigation($settingsnav, $context)
         // Check if the user has the required capability.
         if (has_capability('local/courseflowtool:view', $context)) {
             $url = new moodle_url('/local/courseflowtool/import_tool.php', ['courseid' => $context->instanceid]);
-            $node = navigation_node::create(
-                get_string('pluginname', 'local_courseflowtool'),
-                $url,
-                navigation_node::TYPE_SETTING,
-                null,
-                'courseflowtool',
-                new pix_icon('i/settings', '')
-            );
-            $settingsnav->add_node($node);
+            if ($coursenode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
+                $coursenode->add(
+                    get_string('pluginname', 'local_courseflowtool'),
+                    $url,
+                    navigation_node::TYPE_SETTING,
+                    null,
+                    'courseflowtool',
+                    new pix_icon('i/settings', '')
+                );
+            }
         }
     }
 }
+
 
 /**
  * Creates a new topic (section) in the specified course.
